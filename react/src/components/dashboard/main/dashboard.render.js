@@ -2,7 +2,7 @@ import React from 'react';
 
 import Navbar from '../navbar/navbar';
 import CoinTile from '../coinTile/coinTile';
-import EDEX from '../edex/edex';
+import DEX from '../dex/dex';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
@@ -37,7 +37,7 @@ const DashboardRender = function() {
           <WalletsNativeTxInfo {...this.props} />
         </div>
         <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
-          <EDEX {...this.props} />
+          <DEX {...this.props} />
         </div>
         <div className={ this.isSectionActive('atomic') ? 'show' : 'hide' }>
           <Atomic {...this.props} />

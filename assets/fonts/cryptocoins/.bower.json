@@ -1,0 +1,13 @@
+{
+  "name": "cryptocoins",
+  "homepage": "https://github.com/allienworks/cryptocoins",
+  "_release": "412fa9f76c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "412fa9f76c5cdf899ea228f4ce92ac2c5e722d21"
+  },
+  "_source": "https://github.com/allienworks/cryptocoins.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/allienworks/cryptocoins.git"
+}
