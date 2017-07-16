@@ -1,151 +1,297 @@
 import React from 'react';
 
 class DEX extends React.Component {
-  renderCheckSwapListTab() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: 0,
+    };
+  }
+
+  changeTab(num) {
+    this.setState(Object.assign({}, this.state, {
+      activeTab: num, 
+    }));
+  }
+
+  renderNavMenu() {
     return (
-      <div className="panel panel-default step08_checkswaps">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #8 - Check Swap List
-            </a>
-          </h4>
-        </div>
-        <div id="CheckSwapList" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <p>
-                This section will show you information when coin swap is activated and is in process. Use the refrehs swap list button to get updated information.
-                <br />
-                You will need to press this refresh button again to get latest updates.
-              </p>
-              <button className="btn btn-default refresh_swap_list_btn">Refresh Swap List</button>
-            </div>
-            <div className="col-md-6">
-              <pre className="checkswaplist-output"></pre>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ul className="site-navbar navbar navbar-default navbar-fixed-top navbar-mega dex-navbar">
+        <li
+          className={ this.state.activeTab === 0 ? 'active' : '' }
+          onClick={ () => this.changeTab(0) }>
+          <a>Exchange</a>
+        </li>
+        <li
+          className={ this.state.activeTab === 1 ? 'active' : '' }
+          onClick={ () => this.changeTab(1) }>
+          <a>Balances</a>
+        </li>
+        <li
+          className={ this.state.activeTab === 2 ? 'active' : '' }
+          onClick={ () => this.changeTab(2) }>
+          <a>My Prices</a>
+        </li>
+      </ul>
     );
   }
 
-  renderSwapTab() {
+  renderExchangeTab() {
     return (
-      <div className="panel panel-default step07_initswap">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #7 - Initiate Cross-Blockchain Coin Swap
-            </a>
-          </h4>
-        </div>
-        <div id="initcoinswap" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <div className="form-group">
-                <label htmlFor="buy_coin" className="control-label">What you want to Buy?</label>
-                <select className="form-control buy_coin">
-                  <option value="-">- Select -</option>
-                  <option value="btc">Bitcoin (BTC)</option>
-                  <option value="kmd">Komodo (KMD)</option>
-                </select>
-                <br />
+      <div className="container-fluid section section-exchange">
+        <div className="row">
+          <div className="col-sm-2">
+            <div className="panel panel-danger">
+              <div className="panel-heading">
+                <strong>Selling Pair</strong>
               </div>
-              <br />
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Selected Coin Type: <span className="smartaddr_type"></span></strong>
-                </div>
-                <div>
-                  <table className="table table-striped" style={{ marginBottom: '0' }}>
-                    <tr>
-                      <td colSpan="3" style={{ textAlign: 'center' }}>
-                        <div className="deposit_coin01 col-sm-5"></div>
-                        <div className="col-sm-2">
-                          <span className="glyphicon glyphicon-transfer" style={{ margin: '12px' }}></span>
-                        </div>
-                        <div className="deposit_coin02 col-sm-5"></div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td rowspan="2" id="deposit_coin_qrcode" width="100px" height="100px"></td>
-                      <td>Deposit <span className="deposit_coin_code"></span> To:</td>
-                      <td className="deposit_coin_addr"></td>
-                    </tr>
-                    <tr>
-                      <td className="deposit_info_btns" colSpan="2">
-                        Minimum amount to buy/sell Komodo is 100 KMD.<br />
-                        Price for selling or buying Komodo will be adjusted and given in default buttons accordinlgy.
-                        <br />
-                        <br />
-                        <div className="deposit_btns_part_hidden" style={{ display: 'none' }}>
-                          <p>Use the following button(s) or use the custom amount button to <strong>send a transaction</strong>.</p>
-                          <button className="btn btn-default deposit_coin_btn_01">Send 100 KMD</button>
-                          <button className="btn btn-default deposit_coin_btn_02">Send 0.001 KMD fee</button>
-                          <span className="deposit_coin_btn_03_info">Following button is set with custom BTC deposit amount calculated as:</span>
-                          <pre className="deposit_coin_btn_03_info_pre">("Estimate KMD price" x 100 KMD) + 0.001 BTC Fee</pre>
-                          <button className="btn btn-default deposit_coin_btn_03">Send <span className="deposit_100kmd_worth_btc_btn"></span> BTC</button>
-                          <br />
-                          <br />
-                          <div className="form-group" style={{ display: 'none' }}>
-                            <label htmlFor="deposit_coin_input" className="control-label">Send custom amount</label>
-                            <input type="text" className="form-control deposit_coin_input" id="deposit_coin_input" placeholder="e.g. 0.02" required="required" />
-                            <button className="btn btn-default deposit_coin_input_btn" style={{ marginTop: '5px' }}></button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
+              <div style={{ padding: '5px', height: '340px', overflowY: 'scroll' }}>
+                <div className="list_active_coins">
+                  <button className="btn btn-default btn-block inv_btn" data-coin="KMD">Komodo (KMD)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="BTC">Bitcoin (BTC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="DOGE">Dogecoin (DOGE)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="HUSH">Hushcoin (HUSH)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="DGB">Digibyte (DGB)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="MZC">Mazacoin (MZC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="SYS">Syscoin (SYS)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="UNO">Unobtanium (UNO)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="ZET">Zetacoin (ZET)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="ZEC">Zcash (ZEC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="BTM">Bitmark (BTM)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="CARB">Carboncoin (CARB)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="ANC">Anoncoin (ANC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="FRK">Franko (FRK)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="GAME">Gamecredits (GAME)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="LTC">Litecoin (LTC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="REVS">REV SHARE (REVS)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="JUMBLR">JUMBLR (JUMBLR)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="SUPERNET">SUPERNET (SUPERNET)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="WLC">Wireless (WLC)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="PANGEA">Pangea (PANGEA)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="DEX">InstantDEX (DEX)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="BET">BET (BET)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="CRYPTO">Crypto777 (CRYPTO)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="HODL">HODL (HODL)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="SHARK">SHARK (SHARK)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="BOTS">BOTS (BOTS)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="MGW">MultiGateway (MGW)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="MVP">MVP Lineup (MVP)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="KV">KeyValue (KV)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="CEAL">Ceal.io (CEAL)</button>
+                  <button className="btn btn-default btn-block inv_btn" data-coin="MESH">SuperMesh (MESH)</button>
                 </div>
               </div>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Esitmate Swap Price Calculation</strong>
-                </div>
-                <div>
-                  <table className="table table-striped" style={{ marginBottom: '0' }}>
-                    <tr>
-                      <td className="coin_swap_rate_info" style={{ fontSize: '22px', textAlign: 'center' }}></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Order Details</strong>
-                </div>
-                <div>
-                  <div style={{ margin: '5px' }}>
-                    <strong>NOTE:</strong> In Native DEX your reciving address will be different than your logged in wallet main address.
+            </div>
+          </div>
+          <div className="col-sm-8">
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <strong>Trading Pairs</strong>
                   </div>
-                  <table className="table table-striped" style={{ marginBottom: '0' }}>
-                    <tr>
-                      <td>
-                        Your <span className="swap_deposit_addr_coin_id" style={{ fontWeight: 'bold' }}></span> deposits to
-                      </td>
-                      <td>
-                        <span className="swap_deposit_addr" style={{ fontWeight: 'bold' }}></span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="deposit_coin_dest_addr">
-                        You Recieve <span className="swap_recieve_addr_coin_id" style={{ fontWeight: 'bold' }}></span> in
-                      </td>
-                      <td>
-                        <span className="swap_recieve_addr" style={{ fontWeight: 'bold' }}></span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Amount available in deposit address</td>
-                      <td className="deposit_coin_sourceamount"></td>
-                    </tr>
-                  </table>
+                  <div>
+                    <table className="table table-striped" style={{ marginBottom: '0' }}>
+                      <tr>
+                        <td style={{ fontSize: '22px', textAlign: 'center' }}>
+                          <div className="deposit_coin01 col-sm-5"></div>
+                          <div className="col-sm-2">
+                            <span className="glyphicon glyphicon-arrow-right" style={{ margin: '12px' }}></span>
+                          </div>
+                          <div className="deposit_coin02 col-sm-5"></div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <strong>Esitmate Swap Price Calculation</strong>
+                    <button className="btn btn-default btn-sm refresh_estimate_price" style={{ float: 'right', fontSize: '13px', padding: '0 5px' }}>Refresh</button>
+                  </div>
+                  <div>
+                    <table className="table table-striped" style={{ marginBottom: '0' }}>
+                      <tr>
+                        <td className="coin_swap_rate_info" style={{ fontSize: '22px', textAlign: 'center' }}>
+                          <div className="coin_swap_rate_info1"></div>
+                          <div className="coin_swap_rate_info2"></div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-6">
-              <pre className="initcoinswap-output"></pre>
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    BUY <span className="autotrade_buy_coin"></span>
+                    <button className="btn btn-default btn-sm refresh_inv_table" style={{ float: 'right', fontSize: '13px', padding: '0 5px' }} data-coin="COIN">Refresh</button>  <span style={{ float: 'right', fontSize: '13px', padding: '0 5px' }}>Max Amount: <b><span className="autotrade_max_amount"></span> <span className="autotrade_max_amount_coin"></span></b></span>
+                  </div>
+                  <div className="panel-body">
+                    <div className="form-group">
+                      <label for="autotrade_amount">Amount</label>
+                      <input type="text" className="form-control" id="autotrade_amount" placeholder="Amount" />
+                    </div>
+                    <div className="form-group">
+                      <label for="autotrade_price">Price</label>
+                      <input type="text" className="form-control" id="autotrade_price" placeholder="Price" />
+                    </div>                      
+                    <button className="btn btn-default autotrade_buy_coin_btn">Submit</button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    Sell <span className="lp_sell_coin"></span>
+                  </div>
+                  <div className="panel-body">
+                    <div className="form-group">
+                      <label for="lp_set_price">Set Price</label>
+                      <input type="text" className="form-control" id="lp_set_price" placeholder="Set Price" />
+                    </div>                      
+                    <button className="btn btn-default lp_set_price_btn">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-2">
+            <div className="panel panel-success">
+              <div className="panel-heading">
+                <strong>Buying Pair</strong>
+              </div>
+              <div style={{ padding: '5px', height: '340px', overflowY: 'scroll' }}>
+                <div className="list_active_coins">
+                  <button className="btn btn-default btn-block buy_coin" data-coin="KMD">Komodo (KMD)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="BTC">Bitcoin (BTC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="DOGE">Dogecoin (DOGE)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="HUSH">Hushcoin (HUSH)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="DGB">Digibyte (DGB)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="MZC">Mazacoin (MZC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="SYS">Syscoin (SYS)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="UNO">Unobtanium (UNO)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="ZET">Zetacoin (ZET)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="ZEC">Zcash (ZEC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="BTM">Bitmark (BTM)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="CARB">Carboncoin (CARB)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="ANC">Anoncoin (ANC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="FRK">Franko (FRK)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="GAME">Gamecredits (GAME)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="LTC">Litecoin (LTC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="REVS">REV SHARE (REVS)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="JUMBLR">JUMBLR (JUMBLR)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="SUPERNET">SUPERNET (SUPERNET)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="WLC">Wireless (WLC)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="PANGEA">Pangea (PANGEA)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="DEX">InstantDEX (DEX)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="BET">BET (BET)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="CRYPTO">Crypto777 (CRYPTO)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="HODL">HODL (HODL)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="SHARK">SHARK (SHARK)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="BOTS">BOTS (BOTS)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="MGW">MultiGateway (MGW)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="MVP">MVP Lineup (MVP)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="KV">KeyValue (KV)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="CEAL">Ceal.io (CEAL)</button>
+                  <button className="btn btn-default btn-block buy_coin" data-coin="MESH">SuperMesh (MESH)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="row" style={{ paddingTop: '10px' }}>
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <strong>Sell Orders</strong>
+                    <span style={{ float: 'right' }}>
+                      Total Aks: <span className="orderbook_numasks"></span>
+                    </span>
+                  </div>
+                  <div>
+                    <table className="table table-fixed orderbook_asks" style={{ marginBottom: '0' }}>
+                      <thead>
+                        <th className="col-xs-6">
+                          Price in <span className="orderbook_rel_coin"></span>
+                        </th>
+                        <th className="col-xs-6">
+                          <span className="orderbook_base_coin"></span>
+                        </th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <strong>Buy Orders</strong>
+                    <span style={{ float: 'right' }}>
+                      Total Bids: <span className="orderbook_numbids"></span>
+                    </span>
+                  </div>
+                  <div>
+                    <table className="table table-fixed orderbook_bids" style={{ marginBottom: '0' }}>
+                      <thead>
+                        <th className="col-xs-6">
+                          Price in <span className="orderbook_rel_coin"></span>
+                        </th>
+                        <th className="col-xs-6">
+                          <span className="orderbook_base_coin"></span>
+                        </th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <strong>Show Swap Status</strong>
+                  </div>
+                  <div className="panel-body">
+                    <div className="col-sm-6">
+                      <p>
+                        This section will show you information when coin swap is activated and is in process. Use the refrehs swap list button to get updated information.<br />
+                        You'll need to press this refresh button again to get latest updates.
+                      </p>
+                      <button className="btn btn-default refresh_swap_list_btn">Refresh Swap List</button>
+                      <form className="form-inline" style={{ paddingTop: '12px' }}>
+                        <div className="form-group">
+                          <label for="swap_request_id">Request ID</label>
+                          <input type="text" className="form-control" id="swap_request_id" placeholder="requestid" />
+                        </div>
+                        <div className="form-group">
+                          <label for="swap_quote_id">Quote ID</label>
+                          <input type="email" className="form-control" id="swap_quote_id" placeholder="quoteid" />
+                        </div>
+                        <button className="btn btn-default check_swap_status_btn">Check Swap Status</button>
+                      </form>
+                    </div>
+                    <div className="col-md-6">
+                      <pre className="checkswaplist-output"></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row" style={{ marginTop: '12px' }}>
+              <div className="col-md-12">
+                <pre className="initcoinswap-output"></pre>
+              </div>
             </div>
           </div>
         </div>
@@ -153,64 +299,41 @@ class DEX extends React.Component {
     );
   }
 
-  renderWalletOPTab(){
+  renderBalanceTab() {
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #6 - Wallet Operations
-            </a>
-          </h4>
+      <div className="container-fluid section section-balances">
+        <div className="row">
+          <h1 style={{ textAlign: 'center', fontWeight: '200' }}>BALANCES, DEPOSITS &amp; WITHDRAWALS</h1>
         </div>
-        <div id="CheckWallet" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <div className="form-group">
-                <button className="btn btn-default show-btcbalance">Show Bitcoin Balance</button>
-                <button className="btn btn-default show-kmdbalance">Show Komodo Balance</button>
-                <button className="btn btn-default showwalletinfo">Show Wallet Info</button>
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <strong>DEX Coins Status</strong>&nbsp;
+                <button
+                  className="btn btn-default btn-sm refresh_dex_balances"
+                  style={{ float: 'right', fontSize: '13px', padding: '0 5px' }}>Refresh</button>
               </div>
-              <br />
-              <div className="panel panel-default" style={{ marginBottom: '20px' }}>
-                <div className="panel-heading">
-                  <strong>Coin: <span className="coin_id"></span></strong>
-                </div>
-                <div>
-                  <table className="table table-striped" style={{ marginBottom: '0' }}>
+              <div>
+                <table
+                  className="table table-striped dex_balances_tbl"
+                  style={{ marginBottom: '0' }}>
+                  <thead>
                     <tr>
-                      <td>Main Address</td>
-                      <td className="coin_mainaddr"></td>
+                      <th>Coin</th>
+                      <th>Name</th>
+                      <th>Total Balance</th>
+                      <th>Deposit Address</th>
+                      <th>Status</th>
+                      <th>txfee</th>
+                      <th>Actions</th>
                     </tr>
-                    <tr>
-                      <td>Balance</td>
-                      <td className="coin_balance"></td>
-                    </tr>
-                  </table>
-                </div>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
               </div>
-              <div className="form-group">
-                <h3>Send Transaction</h3>
-                <label htmlFor="send_tx_coin" className="control-label">Select Coin</label>
-                <select className="form-control send_tx_coin">
-                  <option value="-">- Select -</option>
-                  <option value="BTC">Bitcoin (BTC)</option>
-                  <option value="KMD">Komodo (KMD)</option>
-                </select>
-                <br />
-                <label htmlFor="send_tx_addr" className="control-label">Send to Address (Destination Address)</label>
-                <br />
-                <input type="text" className="form-control send_tx_addr" id="send_tx_addr" required="required" />
-                <br />
-                <label htmlFor="send_tx_amount" className="control-label">Send Amount</label>
-                <br />
-                <input type="text" className="form-control send_tx_amount" id="send_tx_amount" required="required" />
-                <br />
-                <button className="btn btn-default send_tx_addr_btn">Send</button>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <pre className="checkwallet-output"></pre>
             </div>
           </div>
         </div>
@@ -218,29 +341,38 @@ class DEX extends React.Component {
     );
   }
 
-  renderDEXParamsTab() {
+  renderMyPricesTab() {
     return (
-      <div className="panel panel-default step05_dexparams">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed" href="#AdjustDEXParams">
-              Step #5 - Adjust DEX Parameters
-            </a>
-          </h4>
+      <div className="container-fluid section section-myprices">
+        <div className="row">
+          <h1 style={{ textAlign: 'center', fontWeight: '200' }}>MY PRICES</h1>
         </div>
-        <div id="AdjustDEXParams" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <div className="form-group">
-                <label htmlFor="dexratio" className="control-label">DEX Ratio</label>
-                <input type="text" className="form-control dexratio-val" id="dexratio" placeholder="eg. 0.97" required="required" />
-                <br />
-                <button className="btn btn-default dexratio-btn">Set DEX Ratio</button>
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <strong>My DEX Coins Prices</strong>&nbsp;
+                <button
+                  className="btn btn-default btn-sm refresh_dex_myprices"
+                  style={{ float: 'right', fontSize: '13px', padding: '0 5px' }}>Refresh</button>
               </div>
-              <br />
-            </div>
-            <div className="col-md-6">
-              <pre className="dexparams-output"></pre>
+              <div>
+                <table
+                  className="table table-striped dex_myprices_tbl"
+                  style={{ marginBottom: '0' }}>
+                  <thead>
+                    <tr>
+                      <th>Base</th>
+                      <th>Rel</th>
+                      <th>Bid</th>
+                      <th>Ask</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -248,278 +380,25 @@ class DEX extends React.Component {
     );
   }
 
-  renderListSmartAddressesTab() {
-    return (
-      <div className="panel panel-default step04_smartaddr">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #4 - List Smart Addresses
-            </a>
-          </h4>
-        </div>
-        <div id="ListSmartAddresses" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-12">
-              <h4>
-                FAQ for Smart Addresses can be found <a href="https://github.com/SuperNETorg/komodo/wiki/FAQ-for-smartaddresses" target="blank">here</a>
-              </h4>
-              <button className="btn btn-default list-smartaddress">List Smart Addresses</button>
-            </div>
-            <div className="col-md-6" style={{ marginTop: '20px' }}>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Type: Deposit</strong>
-                </div>
-                <div>
-                  <table className="table table-striped">
-                    <tr>
-                      <td className="deposit_key0"></td>
-                      <td className="deposit_val0"></td>
-                    </tr>
-                    <tr>
-                      <td className="deposit_key1"></td>
-                      <td className="deposit_val1"></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Type: Jumblr</strong>
-                </div>
-                <div>
-                  <table className="table table-striped">
-                    <tr>
-                      <td className="jumblr_key0"></td>
-                      <td className="jumblr_val0"></td>
-                    </tr>
-                    <tr>
-                      <td className="jumblr_key1"></td>
-                      <td className="jumblr_val1"></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Type: <span className="type0"></span></strong>
-                </div>
-                <div>
-                  <table className="table table-striped">
-                    <tr>
-                      <td>coin</td>
-                      <td className="type0_val0"></td>
-                    </tr>
-                    <tr>
-                      <td>address</td>
-                      <td className="type0_val1"></td>
-                    </tr>
-                    <tr>
-                      <td>dest</td>
-                      <td className="type0_val2"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr_deposit</td>
-                      <td className="type0_val3"></td>
-                    </tr>
-                    <tr>
-                      <td>deposit_avail</td>
-                      <td className="type0_val4"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr</td>
-                      <td className="type0_val5"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr_avail</td>
-                      <td className="type0_val6"></td>
-                    </tr>
-                    <tr>
-                      <td>extra</td>
-                      <td className="type0_val7"></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <strong>Type: <span className="type1"></span></strong>
-                </div>
-                <div>
-                  <table className="table table-striped">
-                    <tr>
-                      <td>coin</td>
-                      <td className="type1_val0"></td>
-                    </tr>
-                    <tr>
-                      <td>address</td>
-                      <td className="type1_val1"></td>
-                    </tr>
-                    <tr>
-                      <td>dest</td>
-                      <td className="type1_val2"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr_deposit</td>
-                      <td className="type1_val3"></td>
-                    </tr>
-                    <tr>
-                      <td>deposit_avail</td>
-                      <td className="type1_val4"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr</td>
-                      <td className="type1_val5"></td>
-                    </tr>
-                    <tr>
-                      <td>jumblr_avail</td>
-                      <td className="type1_val6"></td>
-                    </tr>
-                    <tr>
-                      <td>extra</td>
-                      <td className="type1_val7"></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <pre className="smartaddress-output"></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  renderWalletLoginTab() {
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading" id="headingThree">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #3 - Wallet Login
-            </a>
-          </h4>
-        </div>
-        <div id="WalletLogin" className="panel-collapse collapse">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <div className="form-group">
-                <label htmlFor="passphrase" className="control-label">Passphrase</label>
-                  <input type="text" className="form-control passphrase-text" id="passphrase" placeholder="Enter your text only passphrase" required="required" />
-                  <br />
-                  <label htmlFor="login_type" className="control-label">Login Type</label>
-                  <select className="form-control login_type">
-                    <option value="login_main_wallet">Main Wallet Login</option>
-                    <option value="login_btc_jumblr">Login to access BTC DEX address</option>
-                    <option value="login_kmd_jumblr">Login to access KMD DEX address</option>
-                    <option value="login_jumblr">Login to accesss Jumblr destination address</option>
-                    <option value="login_deposit">Login to access Jumblr deposit address</option>
-                  </select>
-                  <br />
-                  <button className="btn btn-default login-btn">Login</button>
-                  <button className="btn btn-default logout-btn">Logout</button>
-                  <br /><br />
-              </div>
-              <br />
-            </div>
-            <div className="col-md-6">
-              <pre className="passphrase-output"></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  renderBlocktrailApiTab() {
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading" id="headingTwo">
-          <h4 className="panel-title">
-            <a className="collapsed">
-              Step #2 - Setup Blocktrail.com API
-            </a>
-          </h4>
-        </div>
-        <div id="SetupBlockTrail" className="panel-collapse collapse">
-          <div className="panel-body">
-            <p>
-              You need Blocktrail.com API. Please sign-up by going to <a href="https://www.blocktrail.com/dev/signup" target="blank">this link</a>.
-              <br />
-              After login in your account go to "Settings", then go to "API Keys" tab there and get new keys from there.
-              <br />
-              Make sure to save the newly generated 'API Key' and 'API Secret'. You will only see this 'API Secret' first time and never again.
-            </p>
-            <div className="col-md-6">
-              <div className="form-group">
-                <label htmlFor="blocktrailapi" className="control-label">Blocktrail API Key</label>
-                <input type="text" className="form-control blocktrailapi-key" id="blocktrailapi" placeholder="Blocktrail API Key" required="required" />
-                <br />
-                <button className="btn btn-default blocktrailapi-btn">Activate Blocktrail API</button>
-                <br />
-                <br />
-                If you are not Liquidity Provider make sure to push this button: <button className="btn btn-default notlp-btn">I am not LP</button>
-              </div>
-              <br />
-            </div>
-            <div className="col-md-6">
-              <pre className="blocktrail-output"></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  renderActivateCoinTab() {
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading" id="headingOne">
-          <h4 className="panel-title">
-            <a>
-              Step #1 - Activate Coin
-            </a>
-          </h4>
-        </div>
-        <div id="ActivateCoin" className="panel-collapse collapse in">
-          <div className="panel-body">
-            <div className="col-md-6">
-              <div className="form-group">
-                <button className="btn btn-default activate-btc">Activate Bitcoin</button>
-                <button className="btn btn-default activate-kmd">Activate Komodo</button>
-                <button className="btn btn-default active-coin-status">Active Coins Status</button>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <pre className="active-coin-output"></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  renderDexTab() {
+    switch (this.state.activeTab) {
+      case 0:
+        return this.renderExchangeTab();
+        break;
+      case 1:
+        return this.renderBalanceTab();
+        break;
+      case 2:
+        return this.renderMyPricesTab();
+        break;
+    }
   }
 
   render() {
     return (
-      <div className="container-fluid">
-        <h3 className="center">DEX</h3>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="panel-group dex">
-              { this.renderActivateCoinTab() }
-              { this.renderBlocktrailApiTab() }
-              { this.renderWalletLoginTab() }
-              { this.renderListSmartAddressesTab() }
-              { this.renderDEXParamsTab() }
-              { this.renderWalletOPTab() }
-              { this.renderSwapTab() }
-              { this.renderCheckSwapListTab() }
-            </div>
-          </div>
-        </div>
+      <div className="dex">
+        { this.renderNavMenu() }
+        { this.renderDexTab() }
       </div>
     );
   }
