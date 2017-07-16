@@ -22,8 +22,8 @@ class AddCoinOptionsCrypto extends React.Component {
           value="BTCD|full"
           className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>BitcoinDark (BTCD)</option>
         <option
-          value="BTC|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Bitcoin (BTC)</option>
+          value="BTC|full|native"
+          className={ !this.state.nativeOnly ? 'hide' : '' }>Bitcoin (BTC)</option>
         <option
           value="BTM|full"
           className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Bitmark (BTM)</option>

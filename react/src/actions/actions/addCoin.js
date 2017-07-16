@@ -185,6 +185,15 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     };
   }
 
+  if (coin === 'BTC') {
+    herdData = {
+      'ac_name': 'coind',
+      'ac_options': [
+        '-daemon=0',
+      ]
+    };
+  }
+
   if (startupParams) {
     herdData['ac_custom_param'] = startupParams.type;
 
@@ -194,7 +203,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
   }
 
   // TODO: switch statement
-  if (checkCoinType(coin) === 'crypto') {
+  if (checkCoinType(coin) === 'crypto' || coin === 'BTC') {
     acData = startCrypto(
       path.result,
       coin,
@@ -224,16 +233,29 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     herdData.ac_options.push(`-ac_supply=${supply}`);
   }
 
+  let herdName;
+  let bodyObj = {
+    'herd': herdName,
+    'options': herdData
+  };
+  if (coin !== 'ZEC' && coin !== 'BTC'){
+    herdName = 'komodod';
+  }
+  if (coin === 'ZEC') {
+    herdName = 'zcashd';
+  }
+  if (coin === 'BTC') {
+    bodyObj.herd = 'coind';
+    bodyObj.coind = 'BTC';
+  }
+
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/herd`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        'herd': coin !== 'ZEC' ? 'komodod' : 'zcashd',
-        'options': herdData
-      }),
+      body: JSON.stringify(bodyObj),
     })
     .catch(function(error) {
       console.log(error);
@@ -350,6 +372,7 @@ export function iguanaActiveHandleBypass() {
 }
 
 export function shepherdGetConfig(coin, mode, startupParams) {
+  console.log('shepherdGetConfig', coin);
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -383,13 +406,19 @@ export function shepherdGetConfig(coin, mode, startupParams) {
       )
     }
   } else {
+    //console.log('coin', coin);
+    //{ 'chain': coin }
+    let bodyObj = { 'chain': coin };
+    if (coin === 'BTC') {
+      bodyObj = { 'chain': 'coind' , 'coind': coin };
+    }
     return dispatch => {
       return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'chain': coin })
+        body: JSON.stringify(bodyObj)
       })
       .catch(function(error) {
         console.log(error);
