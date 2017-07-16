@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>XST</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="25.00005 50 50 50 50 0 25.00005 0 0.0001 0 0.0001 50"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="XST">
+            <g>
+                <polygon id="Fill-1" fill="#00ADE4" points="23.1274 8.9795 12.5344 16.0805 16.0054 22.8315"></polygon>
+                <polygon id="Fill-2" fill="#00ADE4" points="25 9.6738 17.121 24.9998 25 40.3258 32.88 24.9998"></polygon>
+                <polygon id="Fill-3" fill="#00ADE4" points="26.873 41.0205 37.466 33.9195 33.994 27.1675"></polygon>
+                <polygon id="Fill-4" fill="#00ADE4" points="12.5347 33.9199 23.1277 41.0209 16.0057 27.1679"></polygon>
+                <g id="Group-10">
+                    <g id="Group-7">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-6"></g>
+                        <path d="M40.0361,34.584 L25.0001,44.663 L9.9641,34.584 L14.8901,25 L9.9641,15.417 L25.0001,5.337 L40.0361,15.417 L35.1091,25 L40.0361,34.584 Z M25.0001,0 C11.1931,0 0.0001,11.193 0.0001,25 C0.0001,38.807 11.1931,50 25.0001,50 C38.8071,50 50.0001,38.807 50.0001,25 C50.0001,11.193 38.8071,0 25.0001,0 L25.0001,0 Z" id="Fill-5" fill="#00ADE4" mask="url(#mask-2)"></path>
+                    </g>
+                    <polygon id="Fill-8" fill="#00ADE4" points="26.873 8.9795 33.994 22.8315 37.466 16.0805"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

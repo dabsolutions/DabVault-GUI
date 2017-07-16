@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>KMD</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0.606540895%" x2="50%" y2="39.9918475%" id="linearGradient-1">
+            <stop stop-color="#FAB305" offset="0%"></stop>
+            <stop stop-color="#F1A406" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-2" points="25 50 7.32233047 42.6776695 0 25 7.32233047 7.32233047 25 0 42.6776695 7.32233047 50 25 42.6776695 42.6776695"></polygon>
+        <mask id="mask-3" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="50" height="50" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#346666" offset="0%"></stop>
+            <stop stop-color="#264E4E" offset="97.3871971%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="-52.0571595%" x2="50%" y2="177.232458%" id="linearGradient-5">
+            <stop stop-color="#346666" offset="0%"></stop>
+            <stop stop-color="#264E4E" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="KMD">
+            <g>
+                <use id="Star" stroke="url(#linearGradient-1)" mask="url(#mask-3)" stroke-width="20" xlink:href="#path-2"></use>
+                <polygon id="Star" fill="url(#linearGradient-4)" points="7.32233047 7.32233047 0 25 7.32233047 42.6776695 25 50 42.6776695 42.6776695 50 25 42.6776695 7.32233047 35 15 40.7612047 28.8268343 40.7612047 21.1731657 33.4388742 38.8508352 38.8508352 33.4388742 21.1731657 40.7612047 28.8268343 40.7612047 11.1491648 33.4388742 16.5611258 38.8508352 9.23879533 21.1731657 9.23879533 28.8268343 15 15"></polygon>
+                <polygon id="Star" fill="url(#linearGradient-5)" points="25 35 17.9289322 32.0710678 15 25 17.9289322 17.9289322 25 15 32.0710678 17.9289322 35 25 32.0710678 32.0710678"></polygon>
+                <rect id="Rectangle-5" fill="#FFFFFF" opacity="0.400000006" style="mix-blend-mode: soft-light;" x="0" y="0" width="25" height="50"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,154 @@
+@font-face {
+  font-family: 'icomoon';
+  src: url('fonts/icomoon.eot?jiaioq');
+  src: url('fonts/icomoon.eot?jiaioq#iefix') format('embedded-opentype'),
+       url('fonts/icomoon.ttf?jiaioq') format('truetype'),
+       url('fonts/icomoon.woff?jiaioq') format('woff'),
+       url('fonts/icomoon.svg?jiaioq#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.UNO-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e900" !important;
+}
+.SRC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e901" !important;
+}
+.VTR-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e902" !important;
+}
+.SC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e903" !important;
+}
+.NVC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e904" !important;
+}
+.BTM-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e905" !important;
+}
+.BCN-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e906" !important;
+}
+.ZET-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e907" !important;
+}
+.ZCC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e908" !important;
+}
+.XST-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e909" !important;
+}
+.XRP-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90a" !important;
+}
+.XPM-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90b" !important;
+}
+.XEN-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90c" !important;
+}
+.WDC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90d" !important;
+}
+.QRK-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90e" !important;
+}
+.PPC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e90f" !important;
+}
+.NLG-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e910" !important;
+}
+.MZC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e911" !important;
+}
+.MEC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e912" !important;
+}
+.LMC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e913" !important;
+}
+.KMD-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e914" !important;
+}
+.IFC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e915" !important;
+}
+.GMC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e916" !important;
+}
+.FTC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e917" !important;
+}
+.FRK-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e918" !important;
+}
+.FRC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e919" !important;
+}
+.FLO-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91a" !important;
+}
+.EMC2-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91b" !important;
+}
+.DGC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91c" !important;
+}
+.DEM-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91d" !important;
+}
+.CARB-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91e" !important;
+}
+.C21-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e91f" !important;
+}
+.BLK-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e920" !important;
+}
+.APC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e921" !important;
+}
+.ANC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e922" !important;
+}
+.ABC-alt:before {
+  font-family: 'icomoon' !important;
+  content: "\e923" !important;
+}

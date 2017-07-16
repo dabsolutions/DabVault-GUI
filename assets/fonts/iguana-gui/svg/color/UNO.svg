@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>UNO</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="UNO" transform="translate(-1.000000, -1.000000)">
+            <g transform="translate(1.000000, 1.000000)">
+                <rect id="bg" fill="#FFCF31" x="0" y="0" width="48" height="48" rx="1"></rect>
+                <text id="Un" font-family="Helvetica" font-size="26" font-weight="normal" letter-spacing="-0.600000024" fill="#000000">
+                    <tspan x="8.18183595" y="35">U</tspan>
+                    <tspan x="26.3582031" y="35">n</tspan>
+                </text>
+                <text id="Unobtanium" font-family="Helvetica" font-size="7" font-weight="normal" letter-spacing="-0.300000012" fill="#000000">
+                    <tspan x="2" y="45">Unobtaniu</tspan>
+                    <tspan x="31.2135741" y="45">m</tspan>
+                </text>
+                <text id="120" font-family="Helvetica" font-size="11" font-weight="normal" letter-spacing="-0.471428543" fill="#000000">
+                    <tspan x="1" y="11">120</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

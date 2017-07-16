@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>ANC</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ANC">
+            <g id="Layer_1">
+                <g>
+                    <g id="Group">
+                        <path d="M39.9171806,37.8226872 L10.0799559,37.8226872 L7.38876652,42.7079295 C11.9026432,47.1848018 18.1156388,49.9511013 24.9753304,49.9511013 C31.8477974,49.9511013 38.0713656,47.1748899 42.5872247,42.6832599 L39.9171806,37.8226872 L39.9171806,37.8226872 Z" id="Shape" fill="#000000"></path>
+                        <path d="M24.9753304,0 C11.1817181,0 0,11.1821586 0,24.9755507 C0,29.9557269 1.45837004,34.5953744 3.97048458,38.4914097 L24.9753304,0 L24.9753304,0 Z" id="Shape" fill="#737373"></path>
+                        <path d="M49.9508811,24.9755507 C49.9508811,11.1821586 38.7689427,0 24.9753304,0 L45.9563877,38.5277533 C48.4830396,34.6242291 49.9508811,29.9715859 49.9508811,24.9755507 L49.9508811,24.9755507 Z" id="Shape" fill="#737373"></path>
+                        <polygon id="Shape" fill="#000000" points="17.8596916 23.553304 32.1134361 23.553304 24.9753304 10.5022026"></polygon>
+                        <polygon id="Shape" fill="#000000" points="12.7696035 32.8894273 37.219163 32.8894273 34.811674 28.4865639 15.1698238 28.4865639"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
