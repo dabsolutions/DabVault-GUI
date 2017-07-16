@@ -38,7 +38,7 @@ class WalletsNativeSyncProgress extends React.Component {
           <div
             className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
             style={{ width: '100%' }}>
-            <span style={{ width: '100%' }}>Loading blocks...it can take up to 15 min to load blocks</span>
+            <span style={{ width: '100%' }}>{ translate('INDEX.LOADING_BLOCKS') }</span>
           </div>
         );
       }
@@ -48,7 +48,6 @@ class WalletsNativeSyncProgress extends React.Component {
   renderActivatingBestChainProgress() {
     if (this.props.Settings &&
         this.props.Settings.debugLog) {
-          console.log('debugLog');
       if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
           !this.props.Dashboard.progress &&
           !this.props.Dashboard.progress.blocks) {
@@ -75,7 +74,7 @@ class WalletsNativeSyncProgress extends React.Component {
           if (this.props.Dashboard.progress.remoteKMDNode &&
               this.props.Dashboard.progress.remoteKMDNode.blocks) {
             return(
-              `: ${Math.floor(currentBestChain * 100 / this.props.Dashboard.progress.remoteKMDNode.blocks)}% (blocks ${currentBestChain} / ${this.props.Dashboard.progress.remoteKMDNode.blocks})`
+              `: ${Math.floor(currentBestChain * 100 / this.props.Dashboard.progress.remoteKMDNode.blocks)}% (${ translate('INDEX.BLOCKS_SM') } ${currentBestChain} / ${this.props.Dashboard.progress.remoteKMDNode.blocks})`
             );
           }
         }
@@ -89,16 +88,23 @@ class WalletsNativeSyncProgress extends React.Component {
 
         for (let i = 0; i < temp.length; i++) {
           if (temp[i].indexOf('Progress=') > -1) {
-            currentProgress = Number(temp[i].replace('Progress=', '')) * 100;
+            currentProgress = (Number(temp[i].replace('Progress=', '')) * 100).toFixed(2);
           }
         }
 
         return (
-          `: ${currentProgress}% (rescanning blocks)`
+          `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
+        );
+      } else if (
+          this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
+          this.props.Settings.debugLog.indexOf('Reindexing block file') > -1 
+        ) {
+        return (
+          `: (${ translate('INDEX.REINDEX') })`
         );
       } else {
         return (
-          <span> (downloading blocks)</span>
+          <span> ({ translate('INDEX.DL_BLOCKS') })</span>
         );
       }
     }
@@ -116,14 +122,16 @@ class WalletsNativeSyncProgress extends React.Component {
   }
 
   renderChainActivationNotification() {
-    if (this.props.Dashboard.progress) {
+    return ChainActivationNotificationRender.call(this);
+
+    /* if (this.props.Dashboard.progress) {
       if ((!this.props.Dashboard.progress.blocks && !this.props.Dashboard.progress.longestchain) ||
           (this.props.Dashboard.progress.blocks < this.props.Dashboard.progress.longestchain)) {
         return ChainActivationNotificationRender.call(this);
       }
     } else {
       return null;
-    }
+    } */
   }
 
   render() {

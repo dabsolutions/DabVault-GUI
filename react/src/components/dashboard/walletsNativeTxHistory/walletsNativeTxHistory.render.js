@@ -27,12 +27,12 @@ export const PaginationRender = function(paginationStart, paginationEnd, paginat
     <div className="row unselectable">
       <div className="col-sm-5">
         <div className="dataTables_info">
-          { translate('INDEX.SHOWING') } 
-          { paginationStart } 
-          { translate('INDEX.TO') } 
-          { paginationEnd } 
-          { translate('INDEX.OF') } 
-          { this.props.ActiveCoin.txhistory.length } 
+          { translate('INDEX.SHOWING') }&nbsp;
+          { paginationStart }&nbsp;
+          { translate('INDEX.TO') }&nbsp;
+          { paginationEnd }&nbsp;
+          { translate('INDEX.OF') }&nbsp;
+          { this.props.ActiveCoin.txhistory.length }&nbsp;
           { translate('INDEX.ENTRIES_SM') }
         </div>
       </div>
@@ -113,29 +113,29 @@ export const WalletsNativeTxHistoryRender = function() {
                         className="table table-hover dataTable table-striped"
                         width="100%">
                         <thead>
-                        <tr>
-                          <th>{ translate('INDEX.TYPE') }</th>
-                          <th>{ translate('INDEX.DIRECTION') }</th>
-                          <th>{ translate('INDEX.CONFIRMATIONS') }</th>
-                          <th>{ translate('INDEX.AMOUNT') }</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.DEST_ADDRESS') }</th>
-                          <th>{ translate('INDEX.TX_DETAIL') }</th>
-                        </tr>
+                          <tr>
+                            <th>{ translate('INDEX.TYPE') }</th>
+                            <th>{ translate('INDEX.DIRECTION') }</th>
+                            <th>{ translate('INDEX.CONFIRMATIONS') }</th>
+                            <th>{ translate('INDEX.AMOUNT') }</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.DEST_ADDRESS') }</th>
+                            <th>{ translate('INDEX.TX_DETAIL') }</th>
+                          </tr>
                         </thead>
                         <tbody>
                           { this.renderTxHistoryList() }
                         </tbody>
                         <tfoot>
-                        <tr>
-                          <th>{ translate('INDEX.TYPE') }</th>
-                          <th>{ translate('INDEX.DIRECTION') }</th>
-                          <th>{ translate('INDEX.CONFIRMATIONS') }</th>
-                          <th>{ translate('INDEX.AMOUNT') }</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.DEST_ADDRESS') }</th>
-                          <th>{ translate('INDEX.TX_DETAIL') }</th>
-                        </tr>
+                          <tr>
+                            <th>{ translate('INDEX.TYPE') }</th>
+                            <th>{ translate('INDEX.DIRECTION') }</th>
+                            <th>{ translate('INDEX.CONFIRMATIONS') }</th>
+                            <th>{ translate('INDEX.AMOUNT') }</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.DEST_ADDRESS') }</th>
+                            <th>{ translate('INDEX.TX_DETAIL') }</th>
+                          </tr>
                         </tfoot>
                       </table>
                     </div>

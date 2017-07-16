@@ -49,7 +49,7 @@ export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
-      <td>{ type === 'public' ? address.address : address.address.substring(0, 34) + '...' }</td>
+      <td>{ type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }</td>
       <td>{ address.amount }</td>
       {!this.isNativeMode() &&
         <td>{ address.interest ? address.interest : 'N/A' }</td>
@@ -73,8 +73,7 @@ export const ReceiveCoinRender = function() {
                            onClick={ this.openDropMenu }>
                         <a className="dropdown-toggle white btn btn-warning">
                           <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
-                          <span
-                            className="caret"></span>
+                          <span className="caret"></span>
                         </a>
                         <ul
                           className="dropdown-menu dropdown-menu-right">
@@ -97,7 +96,7 @@ export const ReceiveCoinRender = function() {
                 <div className="panel-body">
                   <table className="table table-hover dataTable table-striped">
                     <thead>
-                    {this.isNativeMode() ?
+                    { this.isNativeMode() ?
                       <tr>
                         <th>{ translate('INDEX.TYPE') }</th>
                         <th>{ translate('INDEX.ADDRESS') }</th>
@@ -113,11 +112,11 @@ export const ReceiveCoinRender = function() {
                     }
                     </thead>
                     <tbody>
-                    {this.renderAddressList('public')}
-                    {this.isNativeMode() && this.renderAddressList('private')}
+                      { this.renderAddressList('public') }
+                      { this.isNativeMode() && this.renderAddressList('private') }
                     </tbody>
                     <tfoot>
-                    {this.isNativeMode() ?
+                    { this.isNativeMode() ?
                       <tr>
                         <th>{ translate('INDEX.TYPE') }</th>
                         <th>{ translate('INDEX.ADDRESS') }</th>

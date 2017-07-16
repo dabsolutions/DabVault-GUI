@@ -66,6 +66,7 @@ export * from './actions/fullTxHistory';
 export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
+export * from './actions/update';
 
 export let Config;
 
@@ -294,7 +295,7 @@ export function rpcErrorHandler(json, dispatch) {
   if (json &&
       json.error) {
     if (json.error === 'bitcoinrpc needs coin that is active') {
-      dispatch(triggerToaster('No active coin', translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(triggerToaster(translate('API.NO_ACTIVE_COIN'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
     }
   }
 }

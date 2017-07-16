@@ -2,8 +2,9 @@ import React from 'react';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
-import WalletsNativeSyncProgress from '../walletsNativeSyncProgress/walletsNativeSyncProgress';
+import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
+import ReceiveCoin from '../receiveCoin/receiveCoin';
 
 const WalletsNativeRender = function() {
   return (
@@ -16,16 +17,19 @@ const WalletsNativeRender = function() {
           <ol className="breadcrumb">
             <li className="header-easydex-section">
               <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } /> 
-              <span className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }>
+              <span
+                className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }
+                style={{ marginLeft: '20px' }}>
                 { this.props.ActiveCoin.coin }
               </span>
             </li>
           </ol>
         </div>
         <div className="page-content">
-          <WalletsNativeSyncProgress {...this.props} />
+          <WalletsProgress {...this.props} />
           <div className="row">
             <WalletsBalance {...this.props} />
+            <ReceiveCoin {...this.props.ActiveCoin} />
             <WalletsNativeTxHistory {...this.props} />
             <WalletsNativeSend {...this.props} />
             <WalletsNativeInfo {...this.props} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import {
+  Config,
   iguanaActiveHandle,
   encryptWallet,
   settingsWifkeyState,
@@ -11,14 +12,25 @@ import {
   getAppConfig,
   saveAppConfig,
   getAppInfo,
-  shepherdCli
+  shepherdCli,
+  checkForUpdateUIPromise,
+  updateUIPromise
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import {
   AppInfoTabRender,
-  SettingsRender
+  SettingsRender,
+  AppUpdateTabRender,
 } from './settings.render';
+
+import { SocketProvider } from 'socket.io-react';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+let updateProgressBar = {
+  patch: -1,
+};
 
 /*
   TODO:
@@ -42,6 +54,13 @@ class Settings extends React.Component {
       cliResponse: null,
       exportWifKeysRaw: false,
       seedInputVisibility: false,
+      nativeOnly: Config.iguanaLessMode,
+      updatePatch: null,
+      updateBins: null,
+      updateLog: [],
+      updateProgressPatch: null,
+      wifkeysPassphrase: '',
+      trimPassphraseTimer: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -55,6 +74,9 @@ class Settings extends React.Component {
     this._saveAppConfig = this._saveAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
+    this._updateUIPromise = this._updateUIPromise.bind(this);
+    socket.on('patch', msg => this.updateSocketsData(msg));
   }
 
   componentDidMount() {
@@ -73,6 +95,125 @@ class Settings extends React.Component {
         tabElId: this.state.tabElId,
       }));
     }
+  }
+
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+          document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
+          document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+      }
+    }, 100);
+  }
+
+  updateSocketsData(data) {
+    if (data &&
+        data.msg &&
+        data.msg.type === 'ui') {
+
+      if (data.msg.status === 'progress' &&
+          data.msg.progress &&
+          data.msg.progress < 100) {
+        this.setState(Object.assign({}, this.state, {
+          updateProgressPatch: data.msg.progress,
+        }));
+        updateProgressBar.patch = data.msg.progress;
+      } else {
+        if (data.msg.status === 'progress' &&
+            data.msg.progress &&
+            data.msg.progress === 100) {
+          let _updateLog = [];
+          _updateLog.push('UI update downloaded. Verifying...');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = 100;
+        }
+
+        if (data.msg.status === 'done') {
+          let _updateLog = [];
+          _updateLog.push('UI is updated!');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+            updatePatch: null,
+          }));
+          updateProgressBar.patch = -1;
+        }
+
+        if (data.msg.status === 'error') {
+          let _updateLog = [];
+          _updateLog.push('Error while verifying update file! Please retry again.');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = -1;
+        }
+      }
+    } else {
+      if (data &&
+          data.msg) {
+        let _updateLog = this.state.updateLog;
+        _updateLog.push(data.msg);
+        this.setState(Object.assign({}, this.state, {
+          updateLog: _updateLog,
+        }));
+      }
+    }
+  }
+
+  _checkForUpdateUIPromise() {
+    let _updateLog = [];
+    _updateLog.push('Checking for UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    checkForUpdateUIPromise()
+    .then((res) => {
+      let _updateLog = this.state.updateLog;
+      _updateLog.push(res.result === 'update' ? (`New UI update available ${res.version.remote}`) : 'You have the lastest UI version');
+      this.setState(Object.assign({}, this.state, {
+        updatePatch: res.result === 'update' ? true : false,
+        updateLog: _updateLog,
+      }));
+    });
+  }
+
+  _updateUIPromise() {
+    updateProgressBar.patch = 0;
+    let _updateLog = [];
+    _updateLog.push('Downloading UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    updateUIPromise();
+  }
+
+  renderUpdateStatus() {
+    let items = [];
+    let patchProgressBar = null;
+
+    for (let i = 0; i < this.state.updateLog.length; i++) {
+      items.push(
+        <div>{ this.state.updateLog[i] }</div>
+      );
+    }
+
+    return (
+      <div style={{ minHeight: '200px' }}>
+        <hr />
+        <h5>Progress:</h5>
+        <div className="padding-bottom-15">{ items }</div>
+        <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
+          <div
+            className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+            style={{ width: updateProgressBar.patch + '%' }}>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   toggleSeedInputVisibility() {
@@ -173,6 +314,10 @@ class Settings extends React.Component {
     return null;
   }
 
+  renderAppUpdateTab() {
+    return AppUpdateTabRender.call(this);
+  }
+
   renderSNPeersList() {
     if (this.state.getPeersCoin) {
       const _getPeersCoin = this.state.getPeersCoin;
@@ -271,9 +416,29 @@ class Settings extends React.Component {
   }
 
   updateInput(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === 'wifkeysPassphrase') {
+      // remove any empty chars from the start/end of the string
+      const newValue = e.target.value;
+
+      clearTimeout(this.state.trimPassphraseTimer);
+
+      const _trimPassphraseTimer = setTimeout(() => {
+        this.setState({
+          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+        });
+      }, 2000);
+
+      this.resizeLoginTextarea();
+
+      this.setState({
+        trimPassphraseTimer: _trimPassphraseTimer,
+        [e.target.name]: newValue,
+      });
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
+    }
   }
 
   renderDebugLogData() {
@@ -320,12 +485,54 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
+      let __cliResponseParsed;
+      if (typeof _cliResponseParsed !== 'object' &&
+          typeof _cliResponseParsed !== 'number' &&
+          _cliResponseParsed !== 'wrong cli string format' &&
+          _cliResponseParsed.indexOf('\r\n') > -1) {
+        _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
+      } else if (
+        typeof _cliResponseParsed !== 'object' &&
+        typeof _cliResponseParsed !== 'number' &&
+        _cliResponseParsed !== 'wrong cli string format' &&
+        _cliResponseParsed.indexOf('\n') > -1
+        ) {
+        __cliResponseParsed = _cliResponseParsed.split('\n') ;
+      } else {
+        __cliResponseParsed = _cliResponseParsed;
+      }
+
+      let _items = [];
+
+      if (__cliResponseParsed.length &&
+          __cliResponseParsed !== 'wrong cli string format') {
+        for (let i = 0; i < __cliResponseParsed.length; i++) {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
+          );
+        }
+      } else {
+        if (typeof _cliResponseParsed === 'object') {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
+          );
+        } else if (typeof _cliResponseParsed === 'string' || typeof _cliResponseParsed === 'number' || _cliResponseParsed === 'wrong cli string format') {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
+          );
+        } else {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ translate('INDEX.NO_DATA_AVAILABLE') }</div>
+          );
+        }
+      }
+
       return (
         <div>
           <div>
             <strong>CLI response:</strong>
           </div>
-          { JSON.stringify(_cliResponseParsed, null, '\t') }
+          { _items }
         </div>
       );
     } else {

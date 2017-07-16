@@ -10,11 +10,13 @@ const LoginRender = function () {
           <div className="brand">
             <img
               className="brand-img"
-              src="assets/images/easydex-logo-big.png"
+              src="assets/images/agama-login-logo.svg"
+              width="200"
+              height="160"
               alt="SuperNET Iguana" />
           </div>
 
-          <div className="vertical-padding-20 horizontal-padding-0">
+          <div className={ this.state.nativeOnly ? 'hide' : 'vertical-padding-20 horizontal-padding-0' }>
             <span
               className="display-sync-only-coins-toggle"
               onClick={ this.openSyncOnlyModal }>
@@ -52,17 +54,25 @@ const LoginRender = function () {
             </div>
           </div>
 
-          <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
+          <div className={ this.state.activeLoginSection === 'login' && !this.state.nativeOnly ? 'show' : 'hide' }>
             <h4 className="color-white">
-              {translate('INDEX.WELCOME_LOGIN')}
+              { translate('INDEX.WELCOME_LOGIN') }
             </h4>
-            <div className="form-group form-material floating col-sm-9 horizontal-padding-0">
+            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
-                type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                className="form-control"
+                type="password"
+                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }/>
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase } />
+              <textarea
+                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                id="loginPassphrase"
+                name="loginPassphrase"
+                onChange={ this.updateLoginPassPhraseInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase }></textarea>
               <i
                 className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                 onClick={ this.toggleSeedInputVisibility }></i>
@@ -70,20 +80,18 @@ const LoginRender = function () {
                 className="floating-label"
                 htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
             </div>
-            <div className="form-group form-material floating col-sm-3 horizontal-padding-0 margin-top-20">
-              { this.state.loginPassPhraseSeedType
-                ?
-                  this.state.loginPassPhraseSeedType
-                :
-                <div className="placeholder-label">Seed Type</div>
-              }
-            </div>
+            { this.state.loginPassPhraseSeedType &&
+              <div
+                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+              </div>
+            }
             <button
               type="button"
               className="btn btn-primary btn-block"
               onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase
-              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
@@ -197,13 +205,16 @@ const LoginRender = function () {
                   onChange={ (e) => this.updateWalletSeed(e) }
                   readOnly={ !this.isCustomWalletSeed() }
                 ></textarea>
+                <button className="copy-floating-label"
+                  htmlFor="walletseed"
+                  onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
-                  <strong>Weak seed!</strong><br /><br />
-                  Your seed must contain:<br />
-                  - at least 1 upper case letter<br />
-                  - at least 1 digit<br />
-                  - at least 1 special character<br />
-                  - minimum 10 characters long
+                  <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN2') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }
                 </span>
                 <label
                   className="floating-label"

@@ -4,7 +4,8 @@ import {
   Config,
   toggleAddcoinModal,
   getDexCoins,
-  startIguanaInstance
+  startIguanaInstance,
+  iguanaWalletPassphraseState,
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -18,10 +19,11 @@ import {
   checkAC
 } from '../../components/addcoin/payload';
 
-export function addCoin(coin, mode, syncOnly, port) {
-  if (mode === '-1') {
+export function addCoin(coin, mode, syncOnly, port, startupParams) {
+  if (mode === '-1' ||
+      mode === -1) {
     return dispatch => {
-      dispatch(shepherdGetConfig(coin, mode));
+      dispatch(shepherdGetConfig(coin, '-1', startupParams));
     }
   } else {
     if (checkCoinType(coin) === 'currency_ac') {
@@ -45,7 +47,7 @@ export function addCoin(coin, mode, syncOnly, port) {
         const modeToValue = {
           '1': 'full',
           '0': 'basilisk',
-          '-1': 'native'
+          '-1': 'native',
         };
 
         return dispatch => {
@@ -151,7 +153,7 @@ export function iguanaAddCoin(coin, mode, acData, port) {
   }
 }
 
-export function shepherdHerd(coin, mode, path) {
+export function shepherdHerd(coin, mode, path, startupParams) {
   let acData;
   let herdData = {
     'ac_name': coin,
@@ -159,7 +161,7 @@ export function shepherdHerd(coin, mode, path) {
       '-daemon=0',
       '-server',
       `-ac_name=${coin}`,
-      '-addnode=78.47.196.146'
+      '-addnode=78.47.196.146',
     ]
   };
 
@@ -168,7 +170,7 @@ export function shepherdHerd(coin, mode, path) {
       'ac_name': 'zcashd',
       'ac_options': [
         '-daemon=0',
-        '-server=1'
+        '-server=1',
       ]
     };
   }
@@ -178,11 +180,20 @@ export function shepherdHerd(coin, mode, path) {
       'ac_name': 'komodod',
       'ac_options': [
         '-daemon=0',
-        '-addnode=78.47.196.146'
+        '-addnode=78.47.196.146',
       ]
     };
   }
 
+  if (startupParams) {
+    herdData['ac_custom_param'] = startupParams.type;
+
+    if (startupParams.value) {
+      herdData['ac_custom_param_value'] = startupParams.value;
+    }
+  }
+
+  // TODO: switch statement
   if (checkCoinType(coin) === 'crypto') {
     acData = startCrypto(
       path.result,
@@ -190,6 +201,7 @@ export function shepherdHerd(coin, mode, path) {
       mode
     );
   }
+
   if (checkCoinType(coin) === 'currency_ac') {
     acData = startCurrencyAssetChain(
       path.result,
@@ -234,15 +246,26 @@ export function shepherdHerd(coin, mode, path) {
       );
     })
     .then(response => response.json())
-    .then(
-      json => dispatch(
-        iguanaAddCoin(
-          coin,
-          mode,
-          acData
-        )
-      )
-    );
+    .then(function(json) {
+      if (Config.iguanaLessMode) {
+        dispatch(
+          addCoinResult(coin, mode)
+        );
+        setTimeout(() => {
+          dispatch(
+            iguanaActiveHandleBypass()
+          );
+        }, 1000);
+      } else {
+        dispatch(
+          iguanaAddCoin(
+            coin,
+            mode,
+            acData
+          )
+        );
+      }
+    });
   }
 }
 
@@ -266,7 +289,7 @@ export function addCoinResult(coin, mode) {
   }
 }
 
-export function _shepherdGetConfig(coin, mode) {
+export function _shepherdGetConfig(coin, mode, startupParams) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`, {
       method: 'POST',
@@ -279,7 +302,7 @@ export function _shepherdGetConfig(coin, mode) {
       console.log(error);
       dispatch(
         triggerToaster(
-          'Failed to get mode config',
+          '_shepherdGetConfig',
           'Error',
           'error'
         )
@@ -291,14 +314,42 @@ export function _shepherdGetConfig(coin, mode) {
         shepherdHerd(
           coin,
           mode,
-          json
+          json,
+          startupParams
         )
       )
     );
   }
 }
 
-export function shepherdGetConfig(coin, mode) {
+export function iguanaActiveHandleBypass() {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'iguanaActiveHandleBypass',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(
+      json => dispatch(
+        iguanaWalletPassphraseState(json, dispatch)
+      )
+    )
+  }
+}
+
+export function shepherdGetConfig(coin, mode, startupParams) {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -313,7 +364,7 @@ export function shepherdGetConfig(coin, mode) {
         console.log(error);
         dispatch(
           triggerToaster(
-            'Failed to get KMD config',
+            'shepherdGetConfig',
             'Error',
             'error'
           )
@@ -325,7 +376,8 @@ export function shepherdGetConfig(coin, mode) {
           shepherdHerd(
             coin,
             mode,
-            json
+            json,
+            startupParams
           )
         )
       )
@@ -343,7 +395,7 @@ export function shepherdGetConfig(coin, mode) {
         console.log(error);
         dispatch(
           triggerToaster(
-            'Failed to get mode config',
+            'shepherdGetConfig',
             'Error',
             'error'
           )
@@ -355,7 +407,8 @@ export function shepherdGetConfig(coin, mode) {
           shepherdHerd(
             coin,
             mode,
-            json
+            json,
+            startupParams
           )
         )
       );
