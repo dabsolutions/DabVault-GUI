@@ -3,6 +3,7 @@ import 'bluebird';
 
 import _config from '../config';
 import { translate } from '../translate/translate';
+import { _coindList } from '../util/coindList';
 import {
   GET_ACTIVE_COINS,
   DASHBOARD_ACTIVE_ADDRESS,
@@ -75,6 +76,9 @@ try {
 } catch (e) {
   Config = _config;
 }
+
+export const coindList = _coindList();
+console.log(coindList);
 
 export function changeActiveAddress(address) {
   return {

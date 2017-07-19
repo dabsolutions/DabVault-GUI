@@ -18,7 +18,8 @@ import {
   getNativeTxHistory,
   getKMDBalanceTotal,
   getSyncInfoNative,
-  getDebugLog
+  getDebugLog,
+  coindList
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -44,16 +45,19 @@ class CoinTileItem extends React.Component {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
       const _propsDashboard = this.props.Dashboard;
-      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+      const syncPercentage = _propsDashboard && _propsDashboard.progress ? _propsDashboard.progress.progress : (_propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0));
 
-      if (syncPercentage < 100) {
+      if (syncPercentage < 100 &&
+          !_propsDashboard.progress.progress) {
         Store.dispatch(getDebugLog('komodo', 10));
       }
-      if (_propsDashboard.progress &&
+      // TODO: freaking complex condition, rewrite
+      if ((Config.iguanaLessMode && _propsDashboard.progress && (_propsDashboard.progress.progress || (_propsDashboard.progress.blocks === _propsDashboard.progress.longestchain)) && coindList[coin.toLowerCase()]) || (_propsDashboard.progress &&
           _propsDashboard.progress.blocks &&
           _propsDashboard.progress.longestchain &&
           syncPercentage &&
-          (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
+          (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD))) {
+        console.log('fetch all data');
         Store.dispatch(getSyncInfoNative(coin, true));
         Store.dispatch(getKMDBalanceTotal(coin));
         Store.dispatch(getNativeTxHistory(coin));
@@ -74,7 +78,7 @@ class CoinTileItem extends React.Component {
       const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
       Store.dispatch(iguanaActiveHandle(true));
-      
+
       Store.dispatch(
         getKMDAddressesNative(
           coin,
@@ -176,7 +180,7 @@ class CoinTileItem extends React.Component {
               _iguanaActiveHandle
             )
           );
-          
+
           Store.dispatch(
             startInterval(
               'basilisk',

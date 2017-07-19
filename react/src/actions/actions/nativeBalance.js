@@ -2,7 +2,8 @@ import { DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE } from '../storeType';
 import {
   triggerToaster,
   Config,
-  getPassthruAgent
+  getPassthruAgent,
+  coindList
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -36,7 +37,7 @@ export function getKMDBalanceTotal(coin) {
     payload = {
       mode: null,
       chain: coin,
-      cmd: 'z_gettotalbalance'
+      cmd: coindList[coin.toLowerCase()] ? 'getbalance' : 'z_gettotalbalance'
     };
   }
 
@@ -94,15 +95,22 @@ export function getKMDBalanceTotal(coin) {
       }));
       if (json &&
           !json.error) {
-        dispatch(getNativeBalancesState(json));
+        dispatch(getNativeBalancesState(json, coin));
       }
     })
   }
 }
 
-export function getNativeBalancesState(json) {
-  return {
-    type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
-    balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
+export function getNativeBalancesState(json, coin) {
+  if (coindList[coin.toLowerCase()]) {
+    return {
+      type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
+      balance: json && !json.error ? (Config.cli.default ? { 'transparent': json.result } : json) : 0,
+    }
+  } else {
+    return {
+      type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
+      balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
+    }
   }
 }

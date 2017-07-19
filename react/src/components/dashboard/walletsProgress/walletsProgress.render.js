@@ -18,11 +18,13 @@ export const SyncErrorBlocksRender = function() {
 };
 
 export const SyncPercentageRender = function(syncPercentage) {
+  const _blockRatio = this.props.Dashboard.progress.progress ? this.props.Dashboard.progress.blocks : `${this.props.Dashboard.progress.blocks} / ${this.props.Dashboard.progress.longestchain}`;
+
   return (
     <div
       className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
       style={{ width: syncPercentage }}>
-      <span style={{ width: syncPercentage }}>{ syncPercentage }</span> | { this.props.Dashboard.progress.blocks } / { this.props.Dashboard.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.Dashboard.progress.connections }
+      <span style={{ width: syncPercentage }}>{ syncPercentage }</span> | { _blockRatio } | { translate('INDEX.CONNECTIONS') }: { this.props.Dashboard.progress.connections }
     </div>
   );
 };
@@ -39,7 +41,7 @@ export const LoadingBlocksRender = function() {
 
 export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
-  
+
   return translationComponents.map((translation, idx) =>
     <span key={idx}>
       { translation }

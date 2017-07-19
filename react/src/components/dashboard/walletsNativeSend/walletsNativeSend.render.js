@@ -130,8 +130,8 @@ export const WalletsNativeSendRender = function() {
                 </div>
                 <div className="col-lg-12">
                   <span>
-                    <strong>{ translate('INDEX.TOTAL') }:</strong>
-                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }
+                    <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
+                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
                     { this.props.ActiveCoin.coin }
                   </span>
                 </div>

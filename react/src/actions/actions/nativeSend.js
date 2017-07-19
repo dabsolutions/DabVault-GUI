@@ -70,14 +70,14 @@ export function sendNativeTx(coin, _payload) {
             _payload.addressType === 'public' && _payload.sendTo.length !== 95 ?
             [
               _payload.sendTo,
-              _payload.amount
+              Number(_payload.amount)
             ]
             :
             [
               _payload.sendFrom,
               [{
                 address: _payload.sendTo,
-                amount: _payload.amount
+                amount: Number(_payload.amount)
               }]
             ]
         };
@@ -123,14 +123,13 @@ export function sendNativeTx(coin, _payload) {
 
         if (json.indexOf('"code":') > -1) {
           const _message = json.substring(
-            `${json.indexOf('"message":"')}11`, 
+            `${json.indexOf('"message":"')}11`,
             json.indexOf('"},"id":"jl777"')
           );
 
           dispatch(
             triggerToaster(
-              true,
-              _message,
+              JSON.parse(_message).error.message,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -139,7 +138,6 @@ export function sendNativeTx(coin, _payload) {
           if (json.indexOf('"code":-4') > -1) {
             dispatch(
               triggerToaster(
-                true,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 translate('API.WALLETDAT_MISMATCH'),
                 'info',

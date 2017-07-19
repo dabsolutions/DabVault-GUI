@@ -15,7 +15,7 @@ const HTTP_STACK_MAX_ENTRIES = 150; // limit stack mem length to N records per t
 
 const trimHTTPLogs = (logObject) => {
   const logObjectArray = Object.keys(logObject);
-  
+
   if (logObjectArray.length - HTTP_STACK_MAX_ENTRIES === 1) {
     delete logObject[logObjectArray.shift()];
   }
@@ -93,7 +93,7 @@ export function Dashboard(state = {
         const logItem = { [actionTS]: action.log };
         newLogState = trimHTTPLogs(Object.assign({}, logState, logItem));
       }
-      
+
       return Object.assign({}, state, {
         guiLog: newLogState,
       });

@@ -6,7 +6,8 @@ import {
   Config,
   shepherdGroomPost,
   getPassthruAgent,
-  iguanaHashHex
+  iguanaHashHex,
+  coindList
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -26,7 +27,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
     'private'
   ];
 
-  if (mode !== 'native') {
+  if (mode !== 'native' || coindList[coin.toLowerCase()]) {
     type.pop();
   }
 

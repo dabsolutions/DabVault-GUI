@@ -27,32 +27,43 @@ const LoginModalRender = function () {
               <div id="wallet-login">
                 <div className="page animsition vertical-align text-center fade-in">
                   <div className="page-content vertical-align-middle">
-                    <div className="brand">
-                      <img className="brand-img" src="assets/images/easydex-logo-big.png" alt="SuperNET Iguana" />
+                    <h4 className="color-white">
+                      { translate('INDEX.WELCOME_LOGIN') }
+                    </h4>
+                    <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
+                      <input
+                        type="password"
+                        className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                        name="loginPassphrase"
+                        onChange={ this.updateLoginPassPhraseInput }
+                        onKeyDown={ (event) => this.handleKeydown(event) }
+                        value={ this.state.loginPassphrase } />
+                      <textarea
+                        className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                        id="loginPassphrase"
+                        name="loginPassphrase"
+                        onChange={ this.updateLoginPassPhraseInput }
+                        onKeyDown={ (event) => this.handleKeydown(event) }
+                        value={ this.state.loginPassphrase }></textarea>
+                      <i
+                        className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                        onClick={ this.toggleSeedInputVisibility }></i>
+                      <label
+                        className="floating-label"
+                        htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
                     </div>
-                    <div id="section-login" className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
-                      <h4 className="color-white" id="login-welcome">{ translate('INDEX.WELCOME_LOGIN') }</h4>
-                      <div className="login-form">
-                        <div className="form-group form-material floating">
-                          <input
-                            type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                            className="form-control"
-                            name="loginPassphrase"
-                            id="password"
-                            onChange={ this.updateInput } />
-                          <i
-                            className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
-                            onClick={ this.toggleSeedInputVisibility }></i>
-                          <label className="floating-label" htmlFor="inputPassword">{translate('INDEX.WALLET_SEED')}</label>
-                        </div>
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-block"
-                          id="loginbtn"
-                          onClick={ this.loginSeed }
-                          disabled={ this.isLoginPassphraseEmpty() }>{ translate('INDEX.SIGN_IN') }</button>
+                    { this.state.loginPassPhraseSeedType &&
+                      <div
+                        className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                        style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                        <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
                       </div>
-                    </div>
+                    }
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block"
+                      onClick={ this.loginSeed }
+                      disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
                   </div>
                 </div>
               </div>

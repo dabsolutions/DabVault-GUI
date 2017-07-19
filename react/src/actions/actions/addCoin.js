@@ -6,6 +6,7 @@ import {
   getDexCoins,
   startIguanaInstance,
   iguanaWalletPassphraseState,
+  coindList
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -185,9 +186,10 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     };
   }
 
-  if (coin === 'BTC') {
+  if (coindList[coin.toLowerCase()]) {
     herdData = {
       'ac_name': 'coind',
+      'ac_manualStart': false,
       'ac_options': [
         '-daemon=0',
       ]
@@ -203,7 +205,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
   }
 
   // TODO: switch statement
-  if (checkCoinType(coin) === 'crypto' || coin === 'BTC') {
+  if (checkCoinType(coin) === 'crypto' || coindList[coin.toLowerCase()]) {
     acData = startCrypto(
       path.result,
       coin,
@@ -238,15 +240,15 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     'herd': herdName,
     'options': herdData
   };
-  if (coin !== 'ZEC' && coin !== 'BTC'){
+  if (coin !== 'ZEC' && !coindList[coin.toLowerCase()]){
     herdName = 'komodod';
   }
   if (coin === 'ZEC') {
     herdName = 'zcashd';
   }
-  if (coin === 'BTC') {
+  if (coindList[coin.toLowerCase()]) {
     bodyObj.herd = 'coind';
-    bodyObj.coind = 'BTC';
+    bodyObj.coind = coin;
   }
 
   return dispatch => {
@@ -409,8 +411,11 @@ export function shepherdGetConfig(coin, mode, startupParams) {
     //console.log('coin', coin);
     //{ 'chain': coin }
     let bodyObj = { 'chain': coin };
-    if (coin === 'BTC') {
-      bodyObj = { 'chain': 'coind' , 'coind': coin };
+    if (coindList[coin.toLowerCase()]) {
+      bodyObj = {
+        'chain': 'coind',
+        'coind': coin
+      };
     }
     return dispatch => {
       return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`, {
