@@ -98,14 +98,17 @@ export function addCoin(coin, mode, syncOnly, port, startupParams) {
 export function iguanaAddCoin(coin, mode, acData, port) {
   function _iguanaAddCoin(dispatch) {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'iguanaAddCoin',
-      'type': 'post',
-      'url': `http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`,
-      'payload': acData,
-      'status': 'pending',
-    }));
+
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'iguanaAddCoin',
+        'type': 'post',
+        'url': `http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`,
+        'payload': acData,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`, {
       method: 'POST',
@@ -113,11 +116,13 @@ export function iguanaAddCoin(coin, mode, acData, port) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           translate('TOASTR.FAILED_TO_ADDCOIN'),
@@ -128,11 +133,13 @@ export function iguanaAddCoin(coin, mode, acData, port) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(
         addCoinResult(
           coin,
@@ -414,7 +421,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
     if (coindList[coin.toLowerCase()]) {
       bodyObj = {
         'chain': 'coind',
-        'coind': coin
+        'coind': coin,
       };
     }
     return dispatch => {
