@@ -9,7 +9,6 @@ import { getCoinTitle } from '../../../util/coinHelper';
 
 const WalletsNativeRender = function() {
   const _coinStyle = getCoinTitle(this.props.ActiveCoin.coin);
-  console.log(_coinStyle);
   let coinLogoPath = _coinStyle.logo.indexOf('.svg') > -1 ? `assets/global/fonts/cryptoicons/${_coinStyle.logo}` : `assets/images/native/${this.defaultBG()}_header_title_logo.png`;
 
   return (

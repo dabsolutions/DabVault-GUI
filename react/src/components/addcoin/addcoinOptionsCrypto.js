@@ -15,7 +15,7 @@ class AddCoinOptionsCrypto extends React.Component {
 
   render() {
     const isWindows = this.props.appSettings && this.props.appSettings.appInfo && this.props.appSettings.appInfo.sysInfo && this.props.appSettings.appInfo.sysInfo.platform === 'win32';
-    let _coindList = Object.assign(coindList, {
+    const _coindList = Object.assign({}, coindList, {
       'kmd': {
         name: 'Komodo',
         bin: 'komodod',
@@ -29,13 +29,13 @@ class AddCoinOptionsCrypto extends React.Component {
     });
     let items = [];
 
-    for (let key in coindList) {
+    for (let key in _coindList) {
       const _modeVal = this.state.nativeOnly ? `${key.toUpperCase()}|native` : `${key.toUpperCase()}|full`;
 
-      if ((!this.state.nativeOnly && coindList[key].fullMode && !isWindows) ||
-          (this.state.nativeOnly && coindList[key].bins.cli && coindList[key].bins.daemon)) {
+      if ((!this.state.nativeOnly && _coindList[key].fullMode && !isWindows) ||
+          (this.state.nativeOnly && _coindList[key].bins.cli && _coindList[key].bins.daemon)) {
         items.push(
-          <option value={ _modeVal }>{ coindList[key].name } ({ key.toUpperCase() })</option>
+          <option value={ _modeVal }>{ _coindList[key].name } ({ key.toUpperCase() })</option>
         );
       }
     }

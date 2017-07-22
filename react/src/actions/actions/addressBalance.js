@@ -27,7 +27,8 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
     'private'
   ];
 
-  if (mode !== 'native' || coindList[coin.toLowerCase()]) {
+  if (mode !== 'native' ||
+      coindList[coin.toLowerCase()]) {
     type.pop();
   }
 

@@ -251,8 +251,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     bodyObj.herd = 'coind';
     bodyObj.coind = coin;
   }
-  if ( coin === 'KMD' ||
-      (coin !== 'ZEC' && !coindList[coin.toLowerCase()])){
+  if (coin !== 'ZEC' && !coindList[coin.toLowerCase()]){
     bodyObj.herd = 'komodod';
   }
   if (coin === 'ZEC') {

@@ -45,7 +45,13 @@ class CoinTileItem extends React.Component {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
       const _propsDashboard = this.props.Dashboard;
-      const syncPercentage = _propsDashboard && _propsDashboard.progress ? _propsDashboard.progress.progress : (_propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0));
+      let syncPercentage;
+
+      if (_propsDashboard && _propsDashboard.progress && _propsDashboard.progress.progress) {
+        syncPercentage = _propsDashboard.progress.progress;
+      } else if (_propsDashboard && _propsDashboard.progress) {
+        syncPercentage = (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+      }
 
       // TODO: fetch less lines(?)
       if (syncPercentage < 100 &&
@@ -53,7 +59,8 @@ class CoinTileItem extends React.Component {
         Store.dispatch(getDebugLog('komodo', 10));
       }
       // TODO: freaking complex condition, rewrite
-      if ((Config.iguanaLessMode && _propsDashboard.progress && (_propsDashboard.progress.progress || (_propsDashboard.progress.blocks === _propsDashboard.progress.longestchain)) && coindList[coin.toLowerCase()]) || (_propsDashboard.progress &&
+      if ((Config.iguanaLessMode && _propsDashboard.progress && (_propsDashboard.progress.progress || (_propsDashboard.progress.blocks === _propsDashboard.progress.longestchain)) && coindList[coin.toLowerCase()]) ||
+          (!coindList[coin.toLowerCase()] && _propsDashboard.progress &&
           _propsDashboard.progress.blocks &&
           _propsDashboard.progress.longestchain &&
           syncPercentage &&
