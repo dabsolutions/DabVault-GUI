@@ -47,6 +47,7 @@ class CoinTileItem extends React.Component {
       const _propsDashboard = this.props.Dashboard;
       const syncPercentage = _propsDashboard && _propsDashboard.progress ? _propsDashboard.progress.progress : (_propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0));
 
+      // TODO: fetch less lines(?)
       if (syncPercentage < 100 &&
           !_propsDashboard.progress.progress) {
         Store.dispatch(getDebugLog('komodo', 10));
@@ -57,12 +58,14 @@ class CoinTileItem extends React.Component {
           _propsDashboard.progress.longestchain &&
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD))) {
-        console.log('fetch all data');
         Store.dispatch(getSyncInfoNative(coin, true));
         Store.dispatch(getKMDBalanceTotal(coin));
         Store.dispatch(getNativeTxHistory(coin));
         Store.dispatch(getKMDAddressesNative(coin, mode));
-        Store.dispatch(getKMDOPID(null, coin));
+
+        if (!coindList[coin.toLowerCase()]) { // TODO: enable for zcash forks
+          Store.dispatch(getKMDOPID(null, coin));
+        }
       } else {
         Store.dispatch(getSyncInfoNative(coin));
       }

@@ -5,8 +5,13 @@ import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
+import { getCoinTitle } from '../../../util/coinHelper';
 
 const WalletsNativeRender = function() {
+  const _coinStyle = getCoinTitle(this.props.ActiveCoin.coin);
+  console.log(_coinStyle);
+  let coinLogoPath = _coinStyle.logo.indexOf('.svg') > -1 ? `assets/global/fonts/cryptoicons/${_coinStyle.logo}` : `assets/images/native/${this.defaultBG()}_header_title_logo.png`;
+
   return (
     <div className="page margin-left-0">
       <div className="padding-top-0">
@@ -16,7 +21,7 @@ const WalletsNativeRender = function() {
           style={{ 'backgroundImage': `url("assets/images/bg/${this.defaultBG()}_transparent_header_bg.png")` }}>
           <ol className="breadcrumb">
             <li className="header-easydex-section">
-              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } /> 
+              <img src={ coinLogoPath } align="middle" />
               <span
                 className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }
                 style={{ marginLeft: '20px' }}>

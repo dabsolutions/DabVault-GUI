@@ -12,14 +12,14 @@ const CoinTileItemRender = function() {
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.coinlogo}.png` }
-              alt={ item.coinname }/>
+              src={ item.coinlogo.indexOf('.svg') > -1 ? `assets/global/fonts/cryptoicons/${item.coinlogo}` : `assets/images/cryptologo/${item.coinlogo}.png` }
+              alt={ item.coinname } />
             <span className={ `badge up badge-${item.modecolor}` }>
               { item.modecode }
             </span>
           </a>
           <div className="coin-name">
-            { item.coinname } ({ item.coinlogo.toUpperCase() })
+            { item.coinname } ({ item.coinlogo ? item.coinlogo.replace('.svg', '').toUpperCase() : '' })
           </div>
         </div>
       </div>

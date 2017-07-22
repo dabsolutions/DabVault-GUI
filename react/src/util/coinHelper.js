@@ -1,316 +1,341 @@
 export function getCoinTitle(coin) {
-  let coinlogo,
-      coinname;
+  let coindList = {};
+
+  try {
+    coindList = window.require('electron').remote.getCurrentWindow().nativeCoindList;
+  } catch (e) {
+    console.warn('coindList', 'open gui via app');
+  }
+
+  let coinLogo;
+  let coinName;
+
+  if (coindList[coin.toLowerCase()]) {
+    coinLogo = `${coin}.svg`;
+    coinName = coindList[coin.toLowerCase()].name;
+  }
 
   switch (coin) {
     case 'BTC':
-      coinlogo = 'bitcoin';
-      coinname = 'Bitcoin';
+      coinLogo = 'bitcoin';
+      coinName = 'Bitcoin';
       break;
     case 'BTCD':
-      coinlogo = 'bitcoindark';
-      coinname = 'BitcoinDark';
+      coinLogo = 'bitcoindark';
+      coinName = 'BitcoinDark';
       break;
     case 'LTC':
-      coinlogo = 'litecoin';
-      coinname = 'Litecoin';
+      coinLogo = 'litecoin';
+      coinName = 'Litecoin';
       break;
     case 'VPN':
-      coinlogo = 'vpncoin';
-      coinname = 'VPNcoin';
+      coinLogo = 'vpncoin';
+      coinName = 'VPNcoin';
       break;
     case 'SYS':
-      coinlogo = 'syscoin';
-      coinname = 'Syscoin';
+      coinLogo = 'syscoin';
+      coinName = 'Syscoin';
       break;
     case 'ZEC':
-      coinlogo = 'zcash';
-      coinname = 'Zcash';
+      coinLogo = 'zcash';
+      coinName = 'Zcash';
       break;
     case 'NMC':
-      coinlogo = 'namecoin';
-      coinname = 'Namecoin';
+      coinLogo = 'namecoin';
+      coinName = 'Namecoin';
       break;
     case 'DEX':
-      coinlogo = 'dex';
-      coinname = 'InstantDEX';
+      coinLogo = 'dex';
+      coinName = 'InstantDEX';
       break;
     case 'DOGE':
-      coinlogo = 'dogecoin';
-      coinname = 'Dogecoin';
+      coinLogo = 'dogecoin';
+      coinName = 'Dogecoin';
       break;
     case 'DGB':
-      coinlogo = 'digibyte';
-      coinname = 'Digibyte';
+      coinLogo = 'digibyte';
+      coinName = 'Digibyte';
       break;
     case 'MZC':
-      coinlogo = 'mazacoin';
-      coinname = 'Mazacoin';
+      coinLogo = 'mazacoin';
+      coinName = 'Mazacoin';
       break;
     case 'UNO':
-      coinlogo = 'unobtanium';
-      coinname = 'Unobtanium';
+      coinLogo = 'unobtanium';
+      coinName = 'Unobtanium';
       break;
     case 'ZET':
-      coinlogo = 'zetacoin';
-      coinname = 'Zetacoin';
+      coinLogo = 'zetacoin';
+      coinName = 'Zetacoin';
       break;
     case 'KMD':
-      coinlogo = 'komodo';
-      coinname = 'Komodo';
+      coinLogo = 'komodo';
+      coinName = 'Komodo';
       break;
     case 'BTM':
-      coinlogo = 'bitmark';
-      coinname = 'Bitmark';
+      coinLogo = 'bitmark';
+      coinName = 'Bitmark';
       break;
     case 'CARB':
-      coinlogo = 'carboncoin';
-      coinname = 'Carboncoin';
+      coinLogo = 'carboncoin';
+      coinName = 'Carboncoin';
       break;
     case 'ANC':
-      coinlogo = 'anoncoin';
-      coinname = 'AnonCoin';
+      coinLogo = 'anoncoin';
+      coinName = 'AnonCoin';
       break;
     case 'FRK':
-      coinlogo = 'franko';
-      coinname = 'Franko';
+      coinLogo = 'franko';
+      coinName = 'Franko';
       break;
     case 'GAME':
-      coinlogo = 'GAME';
-      coinname = 'GameCredits';
+      coinLogo = 'GAME';
+      coinName = 'GameCredits';
       break;
     case 'SUPERNET':
-      coinlogo = 'SUPERNET';
-      coinname = 'SUPERNET';
+      coinLogo = 'SUPERNET';
+      coinName = 'SUPERNET';
       break;
     case 'REVS':
-      coinlogo = 'REVS';
-      coinname = 'REVS';
+      coinLogo = 'REVS';
+      coinName = 'REVS';
       break;
     case 'WLC':
-      coinlogo = 'WLC';
-      coinname = 'WIRELESS';
+      coinLogo = 'WLC';
+      coinName = 'WIRELESS';
       break;
     case 'PANGEA':
-      coinlogo = 'PANGEA';
-      coinname = 'PANGEA';
+      coinLogo = 'PANGEA';
+      coinName = 'PANGEA';
       break;
     case 'JUMBLR':
-      coinlogo = 'JUMBLR';
-      coinname = 'JUMBLR';
+      coinLogo = 'JUMBLR';
+      coinName = 'JUMBLR';
       break;
     case 'BET':
-      coinlogo = 'BET';
-      coinname = 'BET';
+      coinLogo = 'BET';
+      coinName = 'BET';
       break;
     case 'CRYPTO':
-      coinlogo = 'CRYPTO';
-      coinname = 'CRYPTO';
+      coinLogo = 'CRYPTO';
+      coinName = 'CRYPTO';
       break;
     case 'HODL':
-      coinlogo = 'HODL';
-      coinname = 'HODL';
+      coinLogo = 'HODL';
+      coinName = 'HODL';
       break;
     case 'SHARK':
-      coinlogo = 'SHARK';
-      coinname = 'SHARK';
+      coinLogo = 'SHARK';
+      coinName = 'SHARK';
       break;
     case 'BOTS':
-      coinlogo = 'BOTS';
-      coinname = 'BOTS';
+      coinLogo = 'BOTS';
+      coinName = 'BOTS';
       break;
     case 'MGW':
-      coinlogo = 'MGW';
-      coinname = 'MultiGateway';
+      coinLogo = 'MGW';
+      coinName = 'MultiGateway';
       break;
     case 'MVP':
-      coinlogo = 'MVP';
-      coinname = 'MVP Lineup';
+      coinLogo = 'MVP';
+      coinName = 'MVP Lineup';
       break;
     case 'KV':
-      coinlogo = 'KV';
-      coinname = 'KV';
+      coinLogo = 'KV';
+      coinName = 'KV';
       break;
     case 'CEAL':
-      coinlogo = 'CEAL';
-      coinname = 'CEAL NET';
+      coinLogo = 'CEAL';
+      coinName = 'CEAL NET';
       break;
     case 'MESH':
-      coinlogo = 'MESH';
-      coinname = 'SpaceMesh';
+      coinLogo = 'MESH';
+      coinName = 'SpaceMesh';
       break;
     case 'USD':
-      coinlogo = 'usd';
-      coinname = 'US Dollar';
+      coinLogo = 'usd';
+      coinName = 'US Dollar';
       break;
     case 'RON':
-      coinlogo = 'RON';
-      coinname = 'Romanian Leu';
+      coinLogo = 'RON';
+      coinName = 'Romanian Leu';
       break;
     case 'EUR':
-      coinlogo = 'EUR';
-      coinname = 'Euro';
+      coinLogo = 'EUR';
+      coinName = 'Euro';
       break;
     case 'JPY':
-      coinlogo = 'JPY';
-      coinname = 'Japanese Yen';
+      coinLogo = 'JPY';
+      coinName = 'Japanese Yen';
       break;
     case 'GBP':
-      coinlogo = 'GBP';
-      coinname = 'British Pound';
+      coinLogo = 'GBP';
+      coinName = 'British Pound';
       break;
     case 'AUD':
-      coinlogo = 'AUD';
-      coinname = 'Australian Dollar';
+      coinLogo = 'AUD';
+      coinName = 'Australian Dollar';
       break;
     case 'CAD':
-      coinlogo = 'CAD';
-      coinname = 'Canadian Dollar';
+      coinLogo = 'CAD';
+      coinName = 'Canadian Dollar';
       break;
     case 'CHF':
-      coinlogo = 'CHF';
-      coinname = 'Swiss Franc';
+      coinLogo = 'CHF';
+      coinName = 'Swiss Franc';
       break;
     case 'NZD':
-      coinlogo = 'NZD';
-      coinname = 'New Zealand Dollar';
+      coinLogo = 'NZD';
+      coinName = 'New Zealand Dollar';
       break;
     case 'CNY':
-      coinlogo = 'CNY';
-      coinname = 'Chinese Yuan';
+      coinLogo = 'CNY';
+      coinName = 'Chinese Yuan';
       break;
     case 'RUB':
-      coinlogo = 'RUB';
-      coinname = 'Russian Ruble';
+      coinLogo = 'RUB';
+      coinName = 'Russian Ruble';
       break;
     case 'MXN':
-      coinlogo = 'MXN';
-      coinname = 'Mexican peso';
+      coinLogo = 'MXN';
+      coinName = 'Mexican peso';
       break;
     case 'BRL':
-      coinlogo = 'BRL';
-      coinname = 'Brazilian Real';
+      coinLogo = 'BRL';
+      coinName = 'Brazilian Real';
       break;
     case 'INR':
-      coinlogo = 'INR';
-      coinname = 'Indian Rupee';
+      coinLogo = 'INR';
+      coinName = 'Indian Rupee';
       break;
     case 'HKD':
-      coinlogo = 'HKD';
-      coinname = 'Hong Kong Dollar';
+      coinLogo = 'HKD';
+      coinName = 'Hong Kong Dollar';
       break;
     case 'TRY':
-      coinlogo = 'TRY';
-      coinname = 'Turkish Lira';
+      coinLogo = 'TRY';
+      coinName = 'Turkish Lira';
       break;
     case 'ZAR':
-      coinlogo = 'ZAR';
-      coinname = 'South African Rand';
+      coinLogo = 'ZAR';
+      coinName = 'South African Rand';
       break;
     case 'PLN':
-      coinlogo = 'PLN';
-      coinname = 'Polish Zloty';
+      coinLogo = 'PLN';
+      coinName = 'Polish Zloty';
       break;
     case 'NOK':
-      coinlogo = 'NOK';
-      coinname = 'Norwegian Krone';
+      coinLogo = 'NOK';
+      coinName = 'Norwegian Krone';
       break;
     case 'SEK':
-      coinlogo = 'SEK';
-      coinname = 'Swedish Krona';
+      coinLogo = 'SEK';
+      coinName = 'Swedish Krona';
       break;
     case 'DKK':
-      coinlogo = 'DKK';
-      coinname = 'Danish Krone';
+      coinLogo = 'DKK';
+      coinName = 'Danish Krone';
       break;
     case 'CZK':
-      coinlogo = 'CZK';
-      coinname = 'Czech Koruna';
+      coinLogo = 'CZK';
+      coinName = 'Czech Koruna';
       break;
     case 'HUF':
-      coinlogo = 'HUF';
-      coinname = 'Hungarian Forint';
+      coinLogo = 'HUF';
+      coinName = 'Hungarian Forint';
       break;
     case 'ILS':
-      coinlogo = 'ILS';
-      coinname = 'Israeli Shekel';
+      coinLogo = 'ILS';
+      coinName = 'Israeli Shekel';
       break;
     case 'KRW':
-      coinlogo = 'KRW';
-      coinname = 'Korean Won';
+      coinLogo = 'KRW';
+      coinName = 'Korean Won';
       break;
     case 'MYR':
-      coinlogo = 'MYR';
-      coinname = 'Malaysian Ringgit';
+      coinLogo = 'MYR';
+      coinName = 'Malaysian Ringgit';
       break;
     case 'PHP':
-      coinlogo = 'PHP';
-      coinname = 'Philippine Peso';
+      coinLogo = 'PHP';
+      coinName = 'Philippine Peso';
       break;
     case 'SGD':
-      coinlogo = 'SGD';
-      coinname = 'Singapore Dollar';
+      coinLogo = 'SGD';
+      coinName = 'Singapore Dollar';
       break;
     case 'THB':
-      coinlogo = 'THB';
-      coinname = 'Thai Baht';
+      coinLogo = 'THB';
+      coinName = 'Thai Baht';
       break;
     case 'BGN':
-      coinlogo = 'BGN';
-      coinname = 'Bulgarian Lev';
+      coinLogo = 'BGN';
+      coinName = 'Bulgarian Lev';
       break;
     case 'IDR':
-      coinlogo = 'IDR';
-      coinname = 'Indonesian Rupiah';
+      coinLogo = 'IDR';
+      coinName = 'Indonesian Rupiah';
       break;
     case 'HRK':
-      coinlogo = 'HRK';
-      coinname = 'Croatian Kuna';
+      coinLogo = 'HRK';
+      coinName = 'Croatian Kuna';
       break;
   }
 
   return {
-    'logo': coinlogo,
-    'name': coinname
+    'logo': coinLogo,
+    'name': coinName
   };
 }
 
 export function getModeInfo(mode) {
-  let modecode,
-      modetip,
-      modecolor;
+  let modeStyle = {
+    code: null,
+    tip: null,
+    color: null,
+  };
 
   switch (mode) {
     case 'native':
-      modecode = 'Native';
-      modetip = 'Native';
-      modecolor = 'primary';
+      modeStyle = {
+        code: 'Native',
+        tip: 'Native',
+        color: 'primary',
+      };
       break;
     case 'basilisk':
-      modecode = 'Basilisk';
-      modetip = 'Basilisk';
-      modecolor = 'info';
+      modeStyle = {
+        code: 'Basilisk',
+        tip: 'Basilisk',
+        color: 'info',
+      };
       break;
     case 'full':
-      modecode = 'Full';
-      modetip = 'Full';
-      modecolor = 'success';
+      modeStyle = {
+        code: 'Full',
+        tip: 'Full',
+        color: 'success',
+      };
       break;
     case 'virtual':
-      modecode = 'Virtual';
-      modetip = 'Virtual';
-      modecolor = 'danger';
+      modeStyle = {
+        code: 'Virtual',
+        tip: 'Virtual',
+        color: 'danger',
+      };
       break;
     case 'notarychains':
-      modecode = 'Notarychains';
-      modetip = 'Notarychains';
-      modecolor = 'dark';
+      modeStyle = {
+        code: 'Notarychains',
+        tip: 'Notarychains',
+        color: 'dark',
+      };
       break;
   }
 
   return {
-    'code': modecode,
-    'tip': modetip,
-    'color': modecolor
+    code: modeStyle.code,
+    tip: modeStyle.tip,
+    color: modeStyle.color,
   };
 }

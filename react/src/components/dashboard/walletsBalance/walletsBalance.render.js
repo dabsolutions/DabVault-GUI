@@ -28,7 +28,7 @@ const WalletsBalanceRender = function() {
                 <div className="clearfix">
                   <div className="pull-left padding-vertical-10">
                     <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
-                    { this.isNativeMode() ? translate('INDEX.TRANSPARENT_BALANCE') : translate('INDEX.BALANCE') }
+                    { translate(this.isNativeMode() ? 'INDEX.TRANSPARENT_BALANCE' : 'INDEX.BALANCE') }
                   </div>
                   <span className="pull-right padding-top-10 font-size-22">
                     { this.isNativeMode() ?
