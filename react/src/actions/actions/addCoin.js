@@ -173,6 +173,16 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     ]
   };
 
+  if (coindList[coin.toLowerCase()]) {
+    herdData = {
+      'ac_name': 'coind',
+      'ac_manualStart': false,
+      'ac_options': [
+        '-daemon=0',
+      ]
+    };
+  }
+
   if (coin === 'ZEC') {
     herdData = {
       'ac_name': 'zcashd',
@@ -189,16 +199,6 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       'ac_options': [
         '-daemon=0',
         '-addnode=78.47.196.146',
-      ]
-    };
-  }
-
-  if (coindList[coin.toLowerCase()]) {
-    herdData = {
-      'ac_name': 'coind',
-      'ac_manualStart': false,
-      'ac_options': [
-        '-daemon=0',
       ]
     };
   }
@@ -247,15 +247,16 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     'herd': herdName,
     'options': herdData
   };
-  if (coin !== 'ZEC' && !coindList[coin.toLowerCase()]){
-    herdName = 'komodod';
-  }
-  if (coin === 'ZEC') {
-    herdName = 'zcashd';
-  }
   if (coindList[coin.toLowerCase()]) {
     bodyObj.herd = 'coind';
     bodyObj.coind = coin;
+  }
+  if ( coin === 'KMD' ||
+      (coin !== 'ZEC' && !coindList[coin.toLowerCase()])){
+    bodyObj.herd = 'komodod';
+  }
+  if (coin === 'ZEC') {
+    bodyObj.herd = 'zcashd';
   }
 
   return dispatch => {
