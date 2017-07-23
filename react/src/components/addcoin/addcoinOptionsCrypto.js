@@ -29,8 +29,15 @@ class AddCoinOptionsCrypto extends React.Component {
     });
     let items = [];
 
+    // TODO: sorting
     for (let key in _coindList) {
-      const _modeVal = this.state.nativeOnly ? `${key.toUpperCase()}|native` : `${key.toUpperCase()}|full`;
+      const _kmdBasilisk = key === 'kmd' ? 'basilisk|' : '';
+      let _modeVal;
+
+      _modeVal = this.state.nativeOnly ? `${key.toUpperCase()}|native` : `${key.toUpperCase()}|full`;
+      if (key === 'kmd') {
+        _modeVal = this.state.nativeOnly ? `${key.toUpperCase()}|native` : `${key.toUpperCase()}|basilisk|native`;
+      }
 
       if ((!this.state.nativeOnly && _coindList[key].fullMode && !isWindows) ||
           (this.state.nativeOnly && _coindList[key].bins.cli && _coindList[key].bins.daemon)) {

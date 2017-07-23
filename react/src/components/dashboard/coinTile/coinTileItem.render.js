@@ -21,6 +21,14 @@ const CoinTileItemRender = function() {
           <div className="coin-name">
             { item.coinname } ({ item.coinlogo ? item.coinlogo.replace('.svg', '').toUpperCase() : '' })
           </div>
+          <div className="coind-auth-icons">
+            <i
+              className="icon fa-lock"
+              onClick={ () => this._nativeLockWallet(item.coin) }></i>
+            <i
+              className="icon fa-unlock"
+              onClick={ this._toggleLoginModal }></i>
+          </div>
         </div>
       </div>
     </div>

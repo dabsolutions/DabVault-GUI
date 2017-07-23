@@ -1,9 +1,12 @@
 import React from 'react';
 import {
-  toggleAddcoinModal,
-  iguanaWalletPassphrase
+  toggleLoginModal,
+  nativeUnlockWallet,
+  triggerToaster,
+  Config,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import { translate } from '../../../translate/translate';
 
 import LoginModalRender from './loginModal.render';
 
@@ -17,58 +20,120 @@ class LoginModal extends React.Component {
       seedInputVisibility: false,
       display: false,
       modalClassName: 'hide',
+      trimPassphraseTimer: null,
     };
-    /*this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
-    this.updateInput = this.updateInput.bind(this);
-    this.loginSeed = this.loginSeed.bind(this);
+    this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
+    this.unlockWallet = this.unlockWallet.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
-    this.handleRegisterWallet = this.handleRegisterWallet.bind(this);*/
-
     this.dismiss = this.dismiss.bind(this);
+    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
   }
 
+  // TODO: proper animation
   componentWillReceiveProps(props) {
-    const addCoinProps = props ? props.AddCoin : null;
+    const loginModalProps = props && props.Dashboard ? props.Dashboard : null;
 
-    if (addCoinProps &&
-        addCoinProps.display !== this.state.display) {
+    if (loginModalProps &&
+        loginModalProps.displayLoginModal !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
-        display: addCoinProps.display,
-        modalClassName: addCoinProps.display ? 'show fade' : 'show fade',
+        display: loginModalProps.displayLoginModal,
+        modalClassName: loginModalProps.displayLoginModal ? 'show fade' : 'show fade',
       }));
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
-          display: addCoinProps.display,
-          modalClassName: addCoinProps.display ? 'show in' : 'hide',
+          display: loginModalProps.displayLoginModal,
+          modalClassName: loginModalProps.displayLoginModal ? 'show in' : 'hide',
         }));
       }, 100);
     }
   }
 
   dismiss() {
-    Store.dispatch(toggleAddcoinModal(false, false));
+    Store.dispatch(toggleLoginModal(false));
+  }
+
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+          document.querySelector('#loginPassphrase').style.height = '1px';
+          document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+      }
+    }, 100);
   }
 
   toggleSeedInputVisibility() {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
+
+    this.resizeLoginTextarea();
   }
 
-  toggleActivateCoinForm() {
-    Store.dispatch(toggleAddcoinModal(true, false));
+  handleKeydown(e) {
+    this.updateLoginPassPhraseInput(e);
+
+    if (e.key === 'Enter') {
+      this.loginSeed();
+    }
   }
 
-  updateInput(e) {
+  updateLoginPassPhraseInput(e) {
+    // remove any empty chars from the start/end of the string
+    const newValue = e.target.value;
+
+    clearTimeout(this.state.trimPassphraseTimer);
+
+    const _trimPassphraseTimer = setTimeout(() => {
+      this.setState({
+        loginPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+      });
+    }, 2000);
+
+    this.resizeLoginTextarea();
+
     this.setState({
-      [e.target.name]: e.target.value,
-      isSeedConfirmError: false,
+      trimPassphraseTimer: _trimPassphraseTimer,
+      [e.target.name]: newValue,
     });
   }
 
-  loginSeed() {
-    Store.dispatch(iguanaWalletPassphrase(this.state.loginPassphrase));
+  unlockWallet() {
+    this.setState({
+      seedInputVisibility: false,
+    });
+    nativeUnlockWallet(this.state.loginPassphrase, this.props.ActiveCoin.coin, Config.dex.walletUnlockTimeout)
+    .then((json) => {
+      if (json.error &&
+          json.error.code &&
+          json.error.code === -14) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'error'
+          )
+        );
+      }
+      if (json.id === null &&
+          json.error === null &&
+          json.result === null) {
+        Store.dispatch(
+          triggerToaster(
+            `${this.props.ActiveCoin.coin} wallet is unlocked`,
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'success'
+          )
+        );
+        this.setState({
+          loginPassphrase: null,
+          seedInputVisibility: false,
+        });
+        this.dismiss();
+      }
+      console.log('unlockWallet', json);
+    });
   }
 
   isLoginPassphraseEmpty() {
@@ -76,7 +141,7 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    if (this.props.Dashboard.activateLoginModal) {
+    if (this.props.Dashboard.displayLoginModal) {
       return LoginModalRender.call(this);
     }
 

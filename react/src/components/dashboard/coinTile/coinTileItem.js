@@ -19,9 +19,14 @@ import {
   getKMDBalanceTotal,
   getSyncInfoNative,
   getDebugLog,
-  coindList
+  coindList,
+  triggerToaster,
+  nativeLockWallet,
+  toggleLoginModal
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+
+import { translate } from '../../../translate/translate';
 
 import CoinTileItemRender from './coinTileItem.render';
 
@@ -34,7 +39,32 @@ class CoinTileItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      nativeOnly: Config.iguanaLessMode,
     };
+    this._toggleLoginModal = this._toggleLoginModal.bind(this);
+  }
+
+  _toggleLoginModal() {
+    console.log('dash', this.props.Dashboard);
+    //_toggleLoginModal
+    Store.dispatch(toggleLoginModal(!this.props.Dashboard.displayLoginModal));
+  }
+
+  _nativeLockWallet(coin) {
+    nativeLockWallet(coin).
+    then((json) => {
+      if (json.id === null &&
+          json.error === null &&
+          json.result === null) {
+        Store.dispatch(
+          triggerToaster(
+            `${coin} wallet is locked`,
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'success'
+          )
+        );
+      }
+    });
   }
 
   // TODO: 1) cache native/full node data to file
@@ -43,9 +73,10 @@ class CoinTileItem extends React.Component {
 
   dispatchCoinActions(coin, mode) {
     if (mode === 'native') {
-      Store.dispatch(iguanaActiveHandle(true));
       const _propsDashboard = this.props.Dashboard;
       let syncPercentage;
+
+      Store.dispatch(iguanaActiveHandle(true));
 
       if (_propsDashboard && _propsDashboard.progress && _propsDashboard.progress.progress) {
         syncPercentage = _propsDashboard.progress.progress;

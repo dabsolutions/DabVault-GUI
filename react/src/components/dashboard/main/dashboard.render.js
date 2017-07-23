@@ -15,6 +15,7 @@ import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
 import WalletsNative from '../walletsNative/walletsNative';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
+import LoginModal from '../loginModal/loginModal';
 
 const DashboardRender = function() {
   return (
@@ -23,6 +24,7 @@ const DashboardRender = function() {
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
         <Navbar {...this.props} />
+        <LoginModal {...this.props} />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />

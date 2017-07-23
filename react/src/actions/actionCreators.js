@@ -28,7 +28,7 @@ import {
   ACTIVE_COIN_GET_ADDRESSES,
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
   START_INTERVAL,
-  STOP_INTERVAL
+  STOP_INTERVAL,
 } from './storeType';
 import {
   logGuiHttp,
@@ -68,6 +68,7 @@ export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
 export * from './actions/update';
+export * from './actions/nativeWalletAuth';
 
 export let Config;
 
@@ -78,7 +79,6 @@ try {
 }
 
 export const coindList = _coindList();
-console.log(coindList);
 
 export function changeActiveAddress(address) {
   return {
