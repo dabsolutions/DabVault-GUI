@@ -1,11 +1,14 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-
+import { coindList } from '../../../actions/actionCreators';
 import WalletsBalanceRender from './walletsBalance.render';
 
 class WalletsBalance extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      coindList,
+    };
     this.isFullySynced = this.isFullySynced.bind(this);
   }
 

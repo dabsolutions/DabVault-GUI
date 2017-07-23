@@ -21,14 +21,14 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' : this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12'}>
+        <div className={ this.isNativeMode() && !this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] ? 'col-lg-3 col-xs-12' : this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12'}>
           <div className="widget widget-shadow">
             <div className="widget-content">
               <div className="padding-20 padding-top-10">
                 <div className="clearfix">
                   <div className="pull-left padding-vertical-10">
-                    <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
-                    { translate(this.isNativeMode() ? 'INDEX.TRANSPARENT_BALANCE' : 'INDEX.BALANCE') }
+                    <i className={ (this.isNativeMode() && this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] ? '' : 'icon fa-eye ' ) + 'font-size-24 vertical-align-bottom margin-right-5' }></i>
+                    { translate(this.isNativeMode() && !this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] ? 'INDEX.TRANSPARENT_BALANCE' : 'INDEX.BALANCE') }
                   </div>
                   <span className="pull-right padding-top-10 font-size-22">
                     { this.isNativeMode() ?
@@ -45,7 +45,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        { this.isNativeMode() &&
+        { this.isNativeMode() && !this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] &&
           <div className="col-lg-3 col-xs-12">
             <div className="widget widget-shadow">
               <div className="padding-20 padding-top-10">
@@ -63,7 +63,7 @@ const WalletsBalanceRender = function() {
           </div>
         }
 
-        <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' :
+        <div className={ this.isNativeMode() && !this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] ? 'col-lg-3 col-xs-12' :
           this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-4 col-xs-12 hide' }>
           <div className="widget widget-shadow">
             <div className="widget-content">
@@ -89,7 +89,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' :
+        <div className={ this.isNativeMode() && !this.state.coindList[this.props.ActiveCoin.coin.toLowerCase()] ? 'col-lg-3 col-xs-12' :
           this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-4 col-xs-12 hide' }>
           <div className="widget widget-shadow">
             <div className="widget-content">
