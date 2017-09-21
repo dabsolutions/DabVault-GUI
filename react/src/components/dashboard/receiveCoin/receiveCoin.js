@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   copyCoinAddress,
+  copyString,
   checkAddressBasilisk,
   validateAddressBasilisk,
-  getNewKMDAddresses
+  getNewKMDAddresses,
+  dumpPrivKey
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -51,6 +53,16 @@ class ReceiveCoin extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  dumpPrivKey(address) {
+    dumpPrivKey(this.props.coin, address)
+    .then((json) => {
+      if (json.length &&
+          json.length > 10) {
+        Store.dispatch(copyString(json, 'WIF address copied to clipboard'));
+      }
+    });
   }
 
   handleClickOutside(e) {

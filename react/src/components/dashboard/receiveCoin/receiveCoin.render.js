@@ -41,8 +41,15 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       </span>
       <button
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
         onClick={ () => this._copyCoinAddress(address) }>
           <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+      </button>
+      <button
+        className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+        title="Get WIF key"
+        onClick={ () => this.dumpPrivKey(address) }>
+          <i className="icon fa-key"></i> WIF
       </button>
       <QRModal content={ address } />
     </td>
