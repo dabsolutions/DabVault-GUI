@@ -25,9 +25,12 @@ body.agamaMode {
   color: #fff;
 }
 
-body.loading-window,
-body.agama-default-window-height {
+body.loading-window {
   height: 355px;
+}
+
+body.agama-default-window-height {
+  height: 300px;
 }
 
 body.agama-app-settings-window {
