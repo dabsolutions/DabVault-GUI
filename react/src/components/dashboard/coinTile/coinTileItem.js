@@ -30,6 +30,7 @@ const BASILISK_CACHE_UPDATE_TIMEOUT = 240000;
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE = 15000;
 const NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD = 90;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
 
 class CoinTileItem extends React.Component {
   constructor() {
@@ -87,7 +88,7 @@ class CoinTileItem extends React.Component {
         const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
         if ((syncPercentage < 100 &&
-            !this.props.Dashboard.displayCoindDownModal) ||
+            (!this.props.Dashboard.displayCoindDownModal || this.props.ActiveCoin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD)) ||
             this.props.ActiveCoin.rescanInProgress) {
           if (coin === 'KMD') {
             Store.dispatch(getDebugLog('komodo', 50));
@@ -96,7 +97,7 @@ class CoinTileItem extends React.Component {
           }
         }
 
-        if (!this.props.Dashboard.displayCoindDownModal &&
+        if ((!this.props.Dashboard.displayCoindDownModal || this.props.ActiveCoin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) &&
             _propsDashboard.progress &&
             _propsDashboard.progress.blocks &&
             _propsDashboard.progress.longestchain &&
@@ -270,6 +271,7 @@ const mapStateToProps = (state) => {
       mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
       progress: state.ActiveCoin.progress,
       rescanInProgress: state.ActiveCoin.rescanInProgress,
+      getinfoFetchFailures: state.ActiveCoin.getinfoFetchFailures,
     },
     Dashboard: state.Dashboard,
     Interval: {
