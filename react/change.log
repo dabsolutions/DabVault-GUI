@@ -27,6 +27,15 @@ UI:
 - updated application settings
 - komodo datadir
 - windows bins path fix
+- osx / linux bins access rights fix
+- disable basilisk by default
+- qr code invoice
+- kmd native dropdown
+- minor native backend calls optimization
+- import seed / key modal
+- native rescan progress
+- receive coin wif key copy
+- app runtime log
 
 v0.2.0.21a-beta
 --------------
