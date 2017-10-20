@@ -17,6 +17,7 @@ class DebugLogPanel extends React.Component {
       debugTarget: 'iguana',
       nativeOnly: Config.iguanaLessMode,
       toggleAppRuntimeLog: false,
+      pristine: true,
     };
     this.readDebugLog = this.readDebugLog.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -26,17 +27,21 @@ class DebugLogPanel extends React.Component {
   }
 
   readDebugLog() {
+    this.setState(Object.assign({}, this.state, {
+      pristine: false,
+    }));
+
     Store.dispatch(
       getDebugLog(
-        this.state.debugTarget,
+        'komodo',
         this.state.debugLinesCount
       )
     );
   }
 
   renderAppRuntimeLog() {
-    let _items = [];
     const _appRuntimeLog = this.state.appRuntimeLog;
+    let _items = [];
 
     for (let i = 0; i < _appRuntimeLog.length; i++) {
       _items.push(
@@ -74,7 +79,8 @@ class DebugLogPanel extends React.Component {
   }
 
   renderDebugLogData() {
-    if (this.props.Settings.debugLog) {
+    if (this.props.Settings.debugLog &&
+        !this.state.pristine) {
       const _debugLogDataRows = this.props.Settings.debugLog.split('\n');
 
       if (_debugLogDataRows &&
@@ -100,11 +106,17 @@ class DebugLogPanel extends React.Component {
     });
   }
 
+  // TODO: extend to include asset chains
+
   render() {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+          { this.props.Main.coins &&
+            this.props.Main.coins.native &&
+            Object.keys(this.props.Main.coins.native).length > 0 &&
+            <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+          }
           <div className="margin-top-30">
             <span className="pointer toggle">
               <label className="switch">
@@ -119,10 +131,13 @@ class DebugLogPanel extends React.Component {
               </label>
               <span
                 className="title"
-                onClick={ this.toggleAppRuntimeLog }>Show app runtime log</span>
+                onClick={ this.toggleAppRuntimeLog }>{ translate('SETTINGS.SHOW_APP_RUNTIME_LOG') }</span>
             </span>
           </div>
           { !this.state.toggleAppRuntimeLog &&
+            this.props.Main.coins &&
+            this.props.Main.coins.native &&
+            Object.keys(this.props.Main.coins.native).length > 0 &&
             <form
               className="read-debug-log-import-form"
               method="post"
@@ -146,7 +161,6 @@ class DebugLogPanel extends React.Component {
                   name="debugTarget"
                   id="settingsDelectDebugLogOptions"
                   onChange={ this.updateInput }>
-                  <option value="iguana" className={ this.state.nativeOnly ? 'hide' : '' }>Iguana</option>
                   <option value="komodo">Komodo</option>
                 </select>
                 <label
@@ -178,6 +192,7 @@ class DebugLogPanel extends React.Component {
 const mapStateToProps = (state) => {
   return {
     Settings: state.Settings,
+    Main: state.Main,
   };
 };
 

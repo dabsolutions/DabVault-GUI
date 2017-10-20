@@ -6,16 +6,18 @@ import EDEX from '../edex/edex';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
-// import SendCoin from '../sendCoin/sendCoin';
+import SendCoin from '../sendCoin/sendCoin';
 import WalletsData from '../walletsData/walletsData';
 import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
-import WalletsNative from '../walletsNative/walletsNative';
+import WalletsMain from '../walletsMain/walletsMain';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
+import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
+import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 
 const DashboardRender = function() {
   return (
@@ -28,11 +30,15 @@ const DashboardRender = function() {
         { this.props.Dashboard.displayImportKeyModal &&
           <ImportKeyModal />
         }
+        { this.props.Dashboard.displayZcparamsModal &&
+          <ZcparamsFetchModal />
+        }
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile />
           <WalletsNav />
           <WalletsTxInfo />
-          <WalletsNative />
+          <WalletsMain />
+          <ClaimInterestModal />
         </div>
         { this.isSectionActive('edex') &&
           <EDEX />

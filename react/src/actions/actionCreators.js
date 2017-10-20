@@ -27,23 +27,17 @@ import {
   GET_PIN_LIST,
   DASHBOARD_SYNC_ONLY_UPDATE,
   DISPLAY_IMPORT_KEY_MODAL,
+  ELECTRUM_SERVER_CHANGED,
+  DISPLAY_ZCASH_PARAMS_FETCH,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
 export * from './actions/nativeSend';
 export * from './actions/coinList';
-// export * from './actions/createWallet';
-//export * from './actions/nativeTxHistory';
-//export * from './actions/nativeBalance';
 export * from './actions/nativeNewAddress';
 // export * from './actions/logout';
-//export * from './actions/edexGetTx';
 export * from './actions/settings';
-// export * from './actions/edexBalance';
 export * from './actions/addCoin';
-//export * from './actions/addressBalance';
-//export * from './actions/syncInfo';
-//export * from './actions/getAddrByAccount';
 // export * from './actions/walletAuth';
 export * from './actions/copyAddress';
 export * from './actions/sysInfo';
@@ -54,6 +48,8 @@ export * from './actions/update';
 export * from './actions/jumblr';
 export * from './actions/interest';
 export * from './actions/nativeDashboardUpdate';
+export * from './actions/getTxDetails';
+export * from './actions/electrum';
 
 export function changeActiveAddress(address) {
   return {
@@ -137,7 +133,7 @@ export function dashboardCoinsState(json) {
   return {
     type: GET_ACTIVE_COINS,
     coins: json,
-    activeCoins: Object.keys(json.native).length ? true : false,
+    total: json.total,
   }
 }
 
@@ -277,5 +273,19 @@ export function displayImportKeyModal(display) {
   return {
     type: DISPLAY_IMPORT_KEY_MODAL,
     displayImportKeyModal: display,
+  }
+}
+
+export function electrumServerChanged(isChanged) {
+  return {
+    type: ELECTRUM_SERVER_CHANGED,
+    eletrumServerChanged: isChanged,
+  }
+}
+
+export function toggleZcparamsFetchModal(display) {
+  return {
+    type: DISPLAY_ZCASH_PARAMS_FETCH,
+    displayZcparamsModal: display,
   }
 }

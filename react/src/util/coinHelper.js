@@ -62,6 +62,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'zetacoin';
       coinname = 'Zetacoin';
       break;
+    case 'MNZ':
+      coinlogo = 'mnz';
+      coinname = 'Monaize';
+      break;
     case 'KMD':
       hideTitle = true;
       titleBG = true;
@@ -371,9 +375,9 @@ export function getModeInfo(mode) {
       modetip = 'Native';
       modecolor = 'primary';
       break;
-    case 'basilisk':
-      modecode = 'Basilisk';
-      modetip = 'Basilisk';
+    case 'spv':
+      modecode = 'SPV';
+      modetip = 'SPV';
       modecolor = 'info';
       break;
     case 'full':

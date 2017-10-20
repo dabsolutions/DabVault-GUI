@@ -7,8 +7,7 @@ export const AddressListRender = function() {
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
         type="button"
-        className="btn dropdown-toggle btn-info"
-        title="Select private address"
+        className={ 'btn dropdown-toggle btn-info' + (this.props.ActiveCoin.mode === 'spv' ? ' disabled' : '') }
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
         <span className="bs-caret">
@@ -21,7 +20,7 @@ export const AddressListRender = function() {
             className="selected"
             onClick={ () => this.updateAddressSelection(null, 'public', null) }>
             <a>
-              <span className="text">{ translate('INDEX.T_FUNDS') }</span>
+              <span className="text">{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
               <span
                 className="glyphicon glyphicon-ok check-mark pull-right"
                 style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
@@ -81,7 +80,7 @@ export const _SendFormRender = function() {
             placeholder="0.000"
             autoComplete="off" />
         </div>
-        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() ? '' : ' hide') }>
+        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
           <span className="pointer">
             <label className="switch">
               <input
@@ -121,6 +120,13 @@ export const _SendFormRender = function() {
             { this.props.ActiveCoin.coin }
           </span>
         </div>
+        { !this.isFullySynced() &&
+          this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'native' &&
+          <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+            <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+          </div>
+        }
         <div className="col-lg-12">
           <button
             type="button"
@@ -216,6 +222,17 @@ export const SendRender = function() {
                   </div>
                 </div>
               }
+              { this.state.spvPreflightSendInProgress &&
+                <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
+              }
+              { this.state.spvVerificationWarning &&
+                <div
+                  className="padding-top-20"
+                  style={{ fontSize: '15px' }}>
+                  <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') }<br />
+                  { translate('SEND.WARNING_SPV_P2') }
+                </div>
+              }
               <div className="widget-body-footer">
                 <a
                   className="btn btn-default waves-effect waves-light"
@@ -240,28 +257,44 @@ export const SendRender = function() {
                 { translate('INDEX.TRANSACTION_RESULT') }
               </h4>
               <div>
-                <table className="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>{ translate('INDEX.KEY') }</th>
-                      <th>{ translate('INDEX.INFO') }</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                      Result
-                      </td>
-                      <td>
-                        <span className="label label-success">success</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Transaction ID</td>
-                      <td>{ this.state.lastSendToResponse }</td>
-                    </tr>
-                  </tbody>
-                </table>
+                { this.state.lastSendToResponse &&
+                  !this.state.lastSendToResponse.msg &&
+                  <table className="table table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th className="padding-left-30">{ translate('INDEX.KEY') }</th>
+                        <th className="padding-left-30">{ translate('INDEX.INFO') }</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="padding-left-30">
+                        { translate('SEND.RESULT') }
+                        </td>
+                        <td className="padding-left-30">
+                          <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
+                        <td className="padding-left-30">{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                }
+                { !this.state.lastSendToResponse &&
+                  <div className="padding-left-30 padding-top-10">{ translate('SEND.PROCESSING_TX') }...</div>
+                }
+                { this.state.lastSendToResponse &&
+                  this.state.lastSendToResponse.msg &&
+                  this.state.lastSendToResponse.msg === 'error' &&
+                  <div className="padding-left-30 padding-top-10">
+                    <div>
+                      <strong>{ translate('INDEX.ERROR') }</strong>
+                    </div>
+                    <div>{ this.state.lastSendToResponse.result }</div>
+                  </div>
+                }
               </div>
               <div className="widget-body-footer">
                 <div className="widget-actions margin-bottom-15 margin-right-15">

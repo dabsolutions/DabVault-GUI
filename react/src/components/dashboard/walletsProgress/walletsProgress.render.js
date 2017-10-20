@@ -98,12 +98,32 @@ export const TranslationComponentsRender = function(translationID) {
 export const ChainActivationNotificationRender = function() {
   if (this.props.ActiveCoin.coin !== 'CHIPS') {
     return (
-      <div className="alert alert-info alert-dismissible margin-bottom-50">
-        <h4>
-          { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
-          { this.props.ActiveCoin.rescanInProgress ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
-        </h4>
-        <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
+      <div>
+        <div className={ 'alert alert-info alert-dismissible margin-bottom-' + (this.state.isWindows && !this.state.isWindowsWorkaroundEnabled && this.isWinSyncPercBelowThreshold() === true && this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin === 'KMD' ? 20 : 50) }>
+          <h4>
+            { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
+            { this.props.ActiveCoin.rescanInProgress || (this.props.ActiveCoin.progress && this.props.ActiveCoin.progress.code && this.props.ActiveCoin.progress.code === -28 && this.props.ActiveCoin.progress.message === 'Rescanning...') ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
+          </h4>
+          <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
+        </div>
+        { this.state.isWindows &&
+          !this.state.isWindowsWorkaroundEnabled &&
+          this.isWinSyncPercBelowThreshold() === true &&
+          this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'native' &&
+          this.props.ActiveCoin.coin === 'KMD' &&
+          <div className="alert alert-warning alert-dismissible margin-bottom-50">
+            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P1') }</p>
+            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
+            <p className="padding-bottom-15">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P3') }</p>
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light win-sync-workaround-btn"
+              onClick={ this.applyWindowsSyncWorkaround }>
+              { translate('DASHBOARD.APPLY_WORKAROUND') }
+            </button>
+          </div>
+        }
       </div>
     );
   } else {

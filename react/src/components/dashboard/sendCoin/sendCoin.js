@@ -7,7 +7,9 @@ import {
   triggerToaster,
   sendNativeTx,
   getKMDOPID,
-  clearLastSendToResponseState
+  clearLastSendToResponseState,
+  shepherdElectrumSend,
+  shepherdElectrumSendPreflight
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -37,6 +39,8 @@ class SendCoin extends React.Component {
       substractFee: false,
       lastSendToResponse: null,
       coin: null,
+      spvVerificationWarning: false,
+      spvPreflightSendInProgress: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,6 +52,7 @@ class SendCoin extends React.Component {
     this.SendFormRender = _SendFormRender.bind(this);
     this.isTransparentTx = this.isTransparentTx.bind(this);
     this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
+    this.isFullySynced = this.isFullySynced.bind(this);
   }
 
   SendFormRender() {
@@ -224,7 +229,7 @@ class SendCoin extends React.Component {
       );
     } else {
       return (
-        <span>{ translate('INDEX.T_FUNDS') }</span>
+        <span>{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
       );
     }
   }
@@ -269,14 +274,12 @@ class SendCoin extends React.Component {
       return (
         <i>{ translate('SEND.AWAITING') }...</i>
       );
-    }
-    if (opid.status === 'executing') {
+    } else if (opid.status === 'executing') {
       isWaitingStatus = false;
       return (
         <i>{ translate('SEND.PROCESSING') }...</i>
       );
-    }
-    if (opid.status === 'failed') {
+    } else if (opid.status === 'failed') {
       isWaitingStatus = false;
       return (
         <span>
@@ -285,8 +288,7 @@ class SendCoin extends React.Component {
           <strong>{ translate('KMD_NATIVE.MESSAGE') }:</strong> <span>{ opid.error.message }</span>
         </span>
       );
-    }
-    if (opid.status === 'success') {
+    } else if (opid.status === 'success') {
       isWaitingStatus = false;
       return (
         <span>
@@ -296,6 +298,7 @@ class SendCoin extends React.Component {
         </span>
       );
     }
+
     if (isWaitingStatus) {
       return (
         <span>{ translate('SEND.WAITING') }...</span>
@@ -345,6 +348,8 @@ class SendCoin extends React.Component {
       if (back) {
         this.setState({
           currentStep: 0,
+          spvVerificationWarning: false,
+          spvPreflightSendInProgress: false,
         });
       } else {
         Store.dispatch(clearLastSendToResponseState());
@@ -361,6 +366,8 @@ class SendCoin extends React.Component {
           addressSelectorOpen: false,
           renderAddressDropdown: true,
           substractFee: false,
+          spvVerificationWarning: false,
+          spvPreflightSendInProgress: false,
         });
       }
     }
@@ -368,17 +375,40 @@ class SendCoin extends React.Component {
     if (step === 1) {
       if (!this.validateSendFormData()) {
         return;
+      } else {
+        this.setState(Object.assign({}, this.state, {
+          spvPreflightSendInProgress: this.props.ActiveCoin.mode === 'spv' ? true : false,
+          currentStep: step,
+        }));
+
+        // spv pre tx push request
+        if (this.props.ActiveCoin.mode === 'spv') {
+          shepherdElectrumSendPreflight(
+            this.props.ActiveCoin.coin,
+            this.state.amount * 100000000,
+            this.state.sendTo,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+          ).then((sendPreflight) => {
+            if (sendPreflight &&
+                sendPreflight.msg === 'success') {
+              this.setState(Object.assign({}, this.state, {
+                spvVerificationWarning: !sendPreflight.result.utxoVerified,
+                spvPreflightSendInProgress: false,
+              }));
+            } else {
+              this.setState(Object.assign({}, this.state, {
+                spvPreflightSendInProgress: false,
+              }));
+            }
+          });
+        }
       }
     }
 
-    if (step === 1 ||
-        step === 2) {
+    if (step === 2) {
       this.setState(Object.assign({}, this.state, {
         currentStep: step,
       }));
-    }
-
-    if (step === 2) {
       this.handleSubmit();
     }
   }
@@ -388,28 +418,59 @@ class SendCoin extends React.Component {
       return;
     }
 
-    Store.dispatch(
-      sendNativeTx(
-        this.props.ActiveCoin.coin,
-        this.state
-      )
-    );
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(
+        sendNativeTx(
+          this.props.ActiveCoin.coin,
+          this.state
+        )
+      );
 
-    if (this.state.addressType === 'private') {
-      setTimeout(() => {
+      if (this.state.addressType === 'private') {
+        setTimeout(() => {
+          Store.dispatch(
+            getKMDOPID(
+              null,
+              this.props.ActiveCoin.coin
+            )
+          );
+        }, 1000);
+      }
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      // no op
+      if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) {
         Store.dispatch(
-          getKMDOPID(
-            null,
-            this.props.ActiveCoin.coin
+          shepherdElectrumSend(
+            this.props.ActiveCoin.coin,
+            this.state.amount * 100000000,
+            this.state.sendTo,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
           )
         );
-      }, 1000);
+      }
     }
   }
 
   // TODO: reduce to a single toast
   validateSendFormData() {
     let valid = true;
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      const _amount = this.state.amount;
+      const _amountSats = this.state.amount * 100000000;
+      const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
+
+      if (_amountSats > _balanceSats) {
+        Store.dispatch(
+          triggerToaster(
+            translate('SEND.INSUFFICIENT_FUNDS'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
+    }
 
     if (!this.state.sendTo ||
         this.state.sendTo.length < 34) {
@@ -482,6 +543,17 @@ class SendCoin extends React.Component {
     return false;
   }
 
+  isFullySynced() {
+    if (this.props.ActiveCoin.progress &&
+        this.props.ActiveCoin.progress.longestchain &&
+        this.props.ActiveCoin.progress.blocks &&
+        this.props.ActiveCoin.progress.longestchain > 0 &&
+        this.props.ActiveCoin.progress.blocks > 0 &&
+        Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
+      return true;
+    }
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
@@ -503,7 +575,9 @@ const mapStateToProps = (state, props) => {
       balance: state.ActiveCoin.balance,
       activeSection: state.ActiveCoin.activeSection,
       lastSendToResponse: state.ActiveCoin.lastSendToResponse,
+      progress: state.ActiveCoin.progress,
     },
+    Dashboard: state.Dashboard,
   };
 
   if (props &&

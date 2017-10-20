@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
-import { getDashboardUpdate } from '../../../actions/actionCreators';
+import {
+  getDashboardUpdate,
+  shepherdElectrumBalance,
+} from '../../../actions/actionCreators';
+
 import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';
@@ -39,40 +43,56 @@ class WalletsBalance extends React.Component {
   }
 
   refreshBalance() {
-    Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      Store.dispatch(
+        shepherdElectrumBalance(
+          this.props.ActiveCoin.coin,
+          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        )
+      );
+    }
   }
 
   renderBalance(type) {
-    let _balance = '0';
+    let _balance = 0;
     const _mode = this.props.ActiveCoin.mode;
 
+    if (this.props.ActiveCoin.balance === 'connection error or incomplete data') {
+      _balance = '-777';
+    }
+
     if (_mode === 'native') {
-      if (type === 'total' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.total) {
-        _balance = this.props.ActiveCoin.balance.total;
+      if (this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance[type]) {
+        _balance = this.props.ActiveCoin.balance[type];
       }
+    } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
+      if (this.props.ActiveCoin.coin === 'KMD') {
+        if (type === 'total' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.total) {
+          _balance = this.props.ActiveCoin.balance.total;
+        }
 
-      if (type === 'interest' &&
-          this.props.ActiveCoin.progress &&
-          this.props.ActiveCoin.progress.interest) {
-        _balance = this.props.ActiveCoin.progress.interest;
-      }
+        if (type === 'interest' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.interest) {
+          _balance = this.props.ActiveCoin.balance.interest;
+        }
 
-      if (type === 'private' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.private) {
-        _balance = this.props.ActiveCoin.balance.private;
-      }
-
-      if (type === 'transparent' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.transparent) {
-        _balance = this.props.ActiveCoin.balance.transparent;
+        if (type === 'transparent' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.balance) {
+          _balance = this.props.ActiveCoin.balance.balance;
+        }
+      } else {
+        _balance = this.props.ActiveCoin.balance.balance;
       }
     }
 
-    return _balance;
+    return Number(_balance);
   }
 
   isActiveCoinMode(coinMode) {
@@ -94,7 +114,6 @@ class WalletsBalance extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        // TODO the conditions below should be merged when native mode is fully merged into the rest of the components
         this.props.ActiveCoin.activeSection === 'default' &&
         !this.props.ActiveCoin.send &&
         !this.props.ActiveCoin.receive) {
@@ -118,9 +137,7 @@ const mapStateToProps = (state) => {
       activeAddress: state.ActiveCoin.activeAddress,
       progress: state.ActiveCoin.progress,
     },
-    Dashboard: {
-      activeHandle: state.Dashboard.activeHandle,
-    },
+    Dashboard: state.Dashboard,
   };
 };
 

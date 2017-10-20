@@ -2,6 +2,12 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 
 const CoindDownModalRender = function() {
+  let _debuglog = this.props.debugLog || '';
+
+  if (_debuglog.indexOf('ENOENT') > -1) {
+    _debuglog = 'Error: ' + (this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}`) + translate('INDEX.COIND_DOWN_MODAL_ERROR');
+  }
+
   return (
     <div>
       <div
@@ -26,7 +32,7 @@ const CoindDownModalRender = function() {
                     <textarea
                       readOnly
                       className="form-control"
-                      value={ this.props.debugLog || '' }></textarea>
+                      value={ _debuglog }></textarea>
                   </div>
                   <button
                     type="button"

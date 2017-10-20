@@ -8,6 +8,7 @@ import {
   toggleCoindDownModal
 } from '../actionCreators';
 import Config from '../../config';
+import { translate } from '../../translate/translate';
 
 export function nativeGetinfoFailureState() {
   return {
@@ -15,7 +16,7 @@ export function nativeGetinfoFailureState() {
   }
 }
 
-// TODO: use debug.log instead
+// TODO: use blockchaininfo rpc
 export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
   let _json = json;
 
@@ -35,7 +36,7 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
         'https://kmd.explorer.supernet.org/api/status?q=getInfo', {
         method: 'GET',
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
         console.warn('remote kmd node fetch failed', true);
         _json = _json.error;
@@ -121,8 +122,8 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
         );
       }
     })
-    .then(function(response) {
-      const _response = response.text().then(function(text) { return text; });
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
       return _response;
     })
     .then(json => {
@@ -157,10 +158,10 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           } else {
             dispatch(
               triggerToaster(
-                'Please make sure to run komodod manually',
-                'Connection error',
+                translate('API.KMD_PASSIVE_ERROR'),
+                translate('API.CONN_ERROR'),
                 'warning',
-                true
+                false
               )
             );
           }
@@ -226,7 +227,7 @@ export function getBlockTemplate(_json, coin) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -236,13 +237,12 @@ export function getBlockTemplate(_json, coin) {
         )
       );
     })
-    .then(function(response) {
-      const _response = response.text().then(function(text) { return text; });
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
       return _response;
     })
     .then(json => {
-      if (!json) {
-      } else {
+      if (json) {
         json = JSON.parse(json);
       }
 
@@ -260,7 +260,8 @@ export function getBlockTemplate(_json, coin) {
           )
         );
       } else {
-        if (json.error && json.error.code === -10) {
+        if (json.error &&
+            json.error.code === -10) {
           console.log('debuglog');
           dispatch(
             getDebugLogProgress(_json, coin)
@@ -291,7 +292,7 @@ export function getDebugLogProgress(_json, coin) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -301,17 +302,18 @@ export function getDebugLogProgress(_json, coin) {
         )
       );
     })
-    .then(function(response) {
-      const _response = response.text().then(function(text) { return text; });
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
       return _response;
     })
     .then(json => {
-      if (!json) {
-      } else {
+      if (json) {
         json = JSON.parse(json);
       }
 
-      if (json.result && json.result.blocks && json.result.headers) {
+      if (json.result &&
+          json.result.blocks &&
+          json.result.headers) {
         _json.result.longestchain = json.result.headers;
         _json.result.progress = json.result.blocks * 100 / json.result.headers;
       } else if (json.result &&

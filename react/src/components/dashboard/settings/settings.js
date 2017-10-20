@@ -21,6 +21,22 @@ import {
 class Settings extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isExperimentalOn: false,
+    };
+    this.displaySPVServerListTab = this.displaySPVServerListTab.bind(this);
+  }
+
+  displaySPVServerListTab() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv) {
+      for (let i = 0; i < this.props.Main.coins.spv.length; i++) {
+        if (this.props.Dashboard.electrumCoins[this.props.Main.coins.spv[i]].serverList) {
+          return true;
+        }
+      }
+    }
   }
 
   componentDidMount(props) {
@@ -30,6 +46,18 @@ class Settings extends React.Component {
     document.getElementById('section-iguana-wallet-settings').setAttribute('style', 'height:auto; min-height: 100%');
   }
 
+  componentWillMount() {
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
+  }
+
   render() {
     return SettingsRender.call(this);
   }
@@ -37,9 +65,8 @@ class Settings extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    Main: {
-      coins: state.Main.coins,
-    },
+    Main: state.Main,
+    Dashboard: state.Dashboard,
   };
 };
 

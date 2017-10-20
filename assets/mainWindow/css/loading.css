@@ -31,11 +31,11 @@ body.agama-default-window-height {
 }
 
 body.closing-window-height {
-  height: 300px;
+  height: 320px;
 }
 
 body.agama-app-settings-window {
-  height: 570px;
+  height: 610px;
 }
 
 .agama-logo {
@@ -149,6 +149,9 @@ body.agama-app-settings-window {
 .margin-right-20 {
   margin-right: 20px;
 }
+.margin-left-20 {
+  margin-left: 20px;
+}
 .margin-top-15 {
   margin-top: 15px;
 }
@@ -208,7 +211,7 @@ body.agama-app-settings-window {
 }
 
 .settings-buttons-block {
-  margin-top: 50px;
+  margin-top: 40px;
   margin-right: 50px;
   text-align: right;
 }
@@ -437,11 +440,30 @@ button.toast-close-button {
   display: inherit;
   top: inherit;
   left: inherit;
-  right: 33.1%;
   padding: 2px 0;
+}
+
+.dropdown-menu.native {
+  right: 256px;
+}
+
+.dropdown-menu.lite {
+  right: 74px;
 }
 
 .dropdown-menu li {
   cursor: pointer;
   margin: 5px 0;
+}
+
+small {
+  display: block;
+  font-size: 14px;
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.padding-top-40 {
+  padding-top: 40px;
 }

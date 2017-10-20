@@ -7,13 +7,17 @@ export function toggleSection(sectionId, activeSections, singleOpen) {
   let newActiveSections = activeSections;
 
   newActiveSections.map((section) => {
-    if (section === sectionId) present = true;
+    if (section === sectionId) {
+      present = true;
+    }
+
     return true;
   });
 
   if (!singleOpen) {
     if (present) {
       const pos = newActiveSections.indexOf(sectionId);
+
       newActiveSections.splice(pos, 1);
     } else {
       newActiveSections.push(sectionId);
@@ -33,10 +37,14 @@ export function setupAccordion(info) {
   if (!singleChild) {
     info.kids.forEach((child, i) => {
       const { openByDefault } = child ? child.props : false;
-      if (singleOpen && activeSections.length === 0 && openByDefault) {
+
+      if (singleOpen &&
+          activeSections.length === 0 &&
+          openByDefault) {
         activeSections.push(`panel-sec-${i}`);
       }
-      if (!singleOpen && openByDefault) {
+      if (!singleOpen &&
+          openByDefault) {
         activeSections.push(`panel-sec-${i}`);
       }
     });
