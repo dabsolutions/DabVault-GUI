@@ -8,7 +8,9 @@ import {
   startInterval,
   getDexCoins,
   triggerToaster,
-  toggleLoginSettingsModal
+  toggleLoginSettingsModal,
+  stopInterval,
+  dashboardChangeActiveCoin,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -197,16 +199,19 @@ class Login extends React.Component {
     if (props.Login.pinList === 'no pins') {
       props.Login.pinList = [];
     }
+
     if (props &&
         props.Main &&
         props.Main.isLoggedIn) {
       if (props.Main.total === 0) {
         this.setState({
           activeLoginSection: 'activateCoin',
+          loginPassphrase: '',
           display: true,
         });
       } else {
         this.setState({
+          loginPassphrase: '',
           display: false,
         });
       }
@@ -215,21 +220,51 @@ class Login extends React.Component {
     if (props &&
         props.Main &&
         !props.Main.isLoggedIn) {
+      document.body.className = 'page-login layout-full page-dark';
+
+      if (props.Interval &&
+          props.Interval.interval &&
+          props.Interval.interval.sync) {
+        Store.dispatch(dashboardChangeActiveCoin());
+        Store.dispatch(
+          stopInterval(
+            'sync',
+            props.Interval.interval
+          )
+        );
+      }
+
       this.setState({
         display: true,
         activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
       });
+    }
 
+    if (props.Main &&
+        props.Main.total === 0) {
       document.body.className = 'page-login layout-full page-dark';
+
+      if (props.Interval &&
+          props.Interval.interval &&
+          props.Interval.interval.sync) {
+        Store.dispatch(dashboardChangeActiveCoin());
+        Store.dispatch(
+          stopInterval(
+            'sync',
+            props.Interval.interval
+          )
+        );
+      }
     }
 
     if (this.state.activeLoginSection !== 'signup' &&
         props &&
         props.Main &&
         props.Main.isLoggedIn) {
-        this.setState({
-          activeLoginSection: 'activateCoin',
-        });
+      this.setState({
+        loginPassphrase: '',
+        activeLoginSection: 'activateCoin',
+      });
     }
   }
 
@@ -264,7 +299,7 @@ class Login extends React.Component {
 
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name]: newValue,
+      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });
   }
@@ -288,9 +323,13 @@ class Login extends React.Component {
   loginSeed() {
     // reset the login pass phrase values so that when the user logs out, the values are clear
     this.setState({
-      loginPassphrase: null,
+      loginPassphrase: '',
       loginPassPhraseSeedType: null,
     });
+
+    // reset login input vals
+    this.refs.loginPassphrase.value = '';
+    this.refs.loginPassphraseTextarea.value = '';
 
     if (this.state.shouldEncryptSeed) {
       Store.dispatch(encryptPassphrase(this.state.loginPassphrase, this.state.encryptKey, this.state.pubKey));
@@ -362,13 +401,6 @@ class Login extends React.Component {
   }
 
   execWalletCreate() {
-    /*Store.dispatch(
-      createNewWallet(
-        this.state.randomSeedConfirm,
-        this.props.Dashboard.activeHandle
-      )
-    );*/
-
     Store.dispatch(
       shepherdElectrumAuth(this.state.randomSeedConfirm)
     );

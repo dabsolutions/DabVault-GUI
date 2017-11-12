@@ -77,11 +77,11 @@ class ImportKeyModal extends React.Component {
 
       this.setState({
         trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name]: newValue,
+        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
       });
     } else {
       this.setState({
-        [e.target.name]: e.target.value,
+        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: e.target.value,
       });
     }
   }
@@ -174,7 +174,7 @@ class ImportKeyModal extends React.Component {
             rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : translate('INDEX.ADDRESS_IMPORTED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
-            false
+            rescan ? false : true,
           )
         );
       } else {
@@ -187,6 +187,19 @@ class ImportKeyModal extends React.Component {
         );
       }
     });
+
+    this.state({
+      passphraseWif: null,
+      passphraseAddress: null,
+      wifkeysPassphrase: null,
+      wifkeysPassphraseTextarea: null,
+      importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+    });
+
+    // reset input vals
+    this.refs.wif
+    this.refs.wifkeysPassphrase.value = '';
+    this.refs.wifkeysPassphraseTextarea.value = '';
   }
 
   generateKeysFromPassphrase() {

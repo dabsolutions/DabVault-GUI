@@ -55,13 +55,17 @@ const LoginRender = function () {
                 type="password"
                 className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 name="loginPassphrase"
+                ref="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
+                autoComplete="off"
                 value={ this.state.loginPassphrase || '' } />
               <textarea
                 className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 id="loginPassphrase"
-                name="loginPassphrase"
+                ref="loginPassphraseTextarea"
+                name="loginPassphraseTextarea"
+                autoComplete="off"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
                 value={ this.state.loginPassphrase || '' }></textarea>
