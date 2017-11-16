@@ -31,6 +31,16 @@ class Navbar extends React.Component {
     this.spvLogout = this.spvLogout.bind(this);
   }
 
+  isRenderSpvLockLogout() {
+    if (this.props.Main &&
+        this.props.Main.isLoggedIn &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv &&
+        this.props.Main.coins.spv.length) {
+      return true;
+    }
+  }
+
   spvLock() {
     shepherdElectrumLock()
     .then((res) => {
@@ -130,6 +140,7 @@ const mapStateToProps = (state) => {
     },
     Main: {
       isLoggedIn: state.Main.isLoggedIn,
+      coins: state.Main.coins,
     },
   };
 };

@@ -447,14 +447,21 @@ select{
   padding-top: 5px;
 }
 
-.icon-spv-connection-warning {
+.icon-spv-connection-warning,
+.icon-native-connection-warning {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   right: 15px;
 
   &:before {
     color: #f2a654;
     font-size: 18px;
+  }
+}
+
+.icon-native-connection-warning {
+  &:before {
+    color: #e9595b;
   }
 }
 
@@ -521,5 +528,67 @@ select{
 .no-borders {
   tbody > tr > td {
     border: none;
+  }
+}
+
+.manual-debuglog-refresh {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  font-size: 20px;
+}
+
+.coind-stdout-refresh-icon {
+  font-size: 20px;
+  margin-top: 7px;
+}
+
+.settings-coind-stdout-textarea {
+  border: none;
+  background-image: none !important;
+}
+
+.receive-address-context-menu {
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.4);
+  background: #fff;
+  position: absolute;
+  z-index: 100;
+  margin-left: 65px;
+  margin-top: 5px;
+
+  ul {
+    margin: 0;
+    list-style: none;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+
+    li {
+      padding: 5px 15px;
+
+      &:first-child {
+        margin-top: 5px;
+      }
+      &:last-child {
+        margin-bottom: 5px;
+      }
+      &:hover {
+        background: #f9f9f9;
+        cursor: pointer;
+      }
+    }
+  }
+  &.closed {
+    z-index: 1700;
+    position: absolute;
+    top: -100%;
+    left: -100%;
+  }
+  .receive-address-context-menu-get-qr {
+    .modal {
+      cursor: default;
+    }
   }
 }

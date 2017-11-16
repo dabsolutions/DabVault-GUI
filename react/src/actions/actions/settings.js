@@ -387,3 +387,95 @@ export function resetAppConfig() {
     })
   }
 }
+
+export function coindGetStdout(chain) {
+  const _chain = chain === 'KMD' ? 'komodod' : chain;
+
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout?chain=${chain}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'coindGetStdout',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export function getWalletDatKeys(chain, keyMatchPattern) {
+  const _chain = chain === 'KMD' ? null : chain;
+
+  return new Promise((resolve, reject) => {
+    fetch(keyMatchPattern ? `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}&search=${keyMatchPattern}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getWalletDatKeys',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export function dumpPrivKey(coin, address) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'dumpprivkey',
+      params: [ address ]
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'dumpPrivKey',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json.result ? json.result : json);
+    })
+  });
+}
