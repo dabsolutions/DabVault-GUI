@@ -25,6 +25,7 @@ import {
   triggerToaster,
   shepherdRemoveCoin,
   toggleCoindDownModal,
+  dashboardRemoveCoin,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -94,9 +95,9 @@ class CoinTileItem extends React.Component {
     ];
     const allCoins = this.props.Main.coins;
     let _coinSelected = false;
+    let _coinMode = {};
     let _mode;
     let _coin;
-    let _coinMode = {};
 
     if (allCoins) {
       modes.map((mode) => {
@@ -151,6 +152,8 @@ class CoinTileItem extends React.Component {
           'success'
         )
       );
+
+      Store.dispatch(dashboardRemoveCoin(coin));
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
       setTimeout(() => {
@@ -179,6 +182,7 @@ class CoinTileItem extends React.Component {
           )
         );
 
+        Store.dispatch(dashboardRemoveCoin(coin));
         Store.dispatch(getDexCoins());
         Store.dispatch(activeHandle());
         setTimeout(() => {
