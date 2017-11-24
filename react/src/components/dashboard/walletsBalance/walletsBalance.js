@@ -15,6 +15,7 @@ class WalletsBalance extends React.Component {
     super();
     this.state = {
       currentAddress: null,
+      loading: false,
     };
     this.isFullySynced = this.isFullySynced.bind(this);
     this.refreshBalance = this.refreshBalance.bind(this);
@@ -43,6 +44,15 @@ class WalletsBalance extends React.Component {
   }
 
   refreshBalance() {
+    this.setState({
+      loading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
+
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {
@@ -56,8 +66,8 @@ class WalletsBalance extends React.Component {
   }
 
   renderBalance(type) {
-    let _balance = 0;
     const _mode = this.props.ActiveCoin.mode;
+    let _balance = 0;
 
     if (this.props.ActiveCoin.balance === 'connection error or incomplete data') {
       _balance = '-777';

@@ -51,6 +51,7 @@ class WalletsData extends React.Component {
       searchTerm: null,
       coin: null,
       txhistory: null,
+      loading: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -88,12 +89,11 @@ class WalletsData extends React.Component {
   displayClaimInterestUI() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.coin === 'KMD' &&
-        this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.balance) {
       if (this.props.ActiveCoin.balance.interest &&
         this.props.ActiveCoin.balance.interest > 0) {
         return 777;
-      } else if (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) {
+      } else if ((this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) || (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)) {
         return -777;
       }
     }
@@ -253,6 +253,15 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
+    this.setState({
+      loading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
+
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {

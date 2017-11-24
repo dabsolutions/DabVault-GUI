@@ -188,7 +188,7 @@ class ImportKeyModal extends React.Component {
       }
     });
 
-    this.state({
+    this.setState({
       passphraseWif: null,
       passphraseAddress: null,
       wifkeysPassphrase: null,
@@ -197,7 +197,6 @@ class ImportKeyModal extends React.Component {
     });
 
     // reset input vals
-    this.refs.wif
     this.refs.wifkeysPassphrase.value = '';
     this.refs.wifkeysPassphraseTextarea.value = '';
   }

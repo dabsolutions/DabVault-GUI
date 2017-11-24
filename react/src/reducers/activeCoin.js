@@ -42,11 +42,12 @@ export function ActiveCoin(state = {
 }, action) {
   switch (action.type) {
     case DASHBOARD_REMOVE_COIN:
-      let _coins = state.coins;
-      delete _coins[action.coin];
-      return {
-        ...state,
-        coins: _coins,
+      if (state.coins && state.coins[action.coin]) {
+        delete state.coins[action.coin];
+
+        return {
+          ...state,
+        };
       }
     case DASHBOARD_ACTIVE_COIN_CHANGE:
       if (state.coins[action.coin]) {
@@ -70,7 +71,11 @@ export function ActiveCoin(state = {
           getinfoFetchFailures: state.getinfoFetchFailures,
         };
         let _coins = state.coins;
-        _coins[state.coin] = _coinDataToStore;
+
+        if (!action.skip) {
+          _coins[state.coin] = _coinDataToStore;
+        }
+        delete _coins.undefined;
 
         return {
           ...state,
@@ -113,7 +118,10 @@ export function ActiveCoin(state = {
             getinfoFetchFailures: state.getinfoFetchFailures,
           };
           let _coins = state.coins;
-          _coins[state.coin] = _coinData;
+
+          if (!action.skip) {
+            _coins[state.coin] = _coinData;
+          }
 
           return {
             ...state,
