@@ -194,11 +194,7 @@ class ClaimInterestModal extends React.Component {
             false
           )
         );
-        this.setState({
-          transactionsList: [],
-          isLoading: false,
-          totalInterest: 0,
-        });
+        this.closeModal();
       }
     });
   }
@@ -228,6 +224,13 @@ class ClaimInterestModal extends React.Component {
               this.confirmClaimInterest();
             }
           } else {
+            Store.dispatch(
+              triggerToaster(
+                sendPreflight.result,
+                'Error',
+                'error'
+              )
+            );
             this.setState(Object.assign({}, this.state, {
               spvPreflightSendInProgress: false,
             }));
@@ -236,7 +239,7 @@ class ClaimInterestModal extends React.Component {
       } else {
         sendToAddressPromise(
           this.props.ActiveCoin.coin,
-          this.state.selectedAddress, // this.state.transactionsList[0].address,
+          this.state.selectedAddress,
           this.props.ActiveCoin.balance.transparent
         ).then((json) => {
           if (json.error &&
@@ -251,12 +254,13 @@ class ClaimInterestModal extends React.Component {
           } else if (json.result && json.result.length && json.result.length === 64) {
             Store.dispatch(
               triggerToaster(
-                `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.transactionsList[0].address}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+                `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.selectedAddress}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'success',
                 false
               )
             );
+            this.closeModal();
           }
         });
       }
@@ -341,7 +345,14 @@ class ClaimInterestModal extends React.Component {
 
   closeModal() {
     this.setState({
+      isLoading: true,
+      transactionsList: [],
+      showZeroInterest: true,
+      totalInterest: 0,
+      spvPreflightSendInProgress: false,
+      spvVerificationWarning: false,
       addressses: {},
+      addressSelectorOpen: false,
       selectedAddress: null,
     });
     Store.dispatch(toggleClaimInterestModal(false));
@@ -349,8 +360,8 @@ class ClaimInterestModal extends React.Component {
 
   render() {
     if (this.props.ActiveCoin &&
-        this.props.ActiveCoin.coin /*&&
-        this.props.ActiveCoin.coin === 'KMD'*/) {
+        this.props.ActiveCoin.coin &&
+        this.props.ActiveCoin.coin === 'KMD') {
       return ClaimInterestModalRender.call(this);
     } else {
       return null;

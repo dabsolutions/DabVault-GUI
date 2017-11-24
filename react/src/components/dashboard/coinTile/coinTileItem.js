@@ -99,11 +99,11 @@ class CoinTileItem extends React.Component {
     let _mode;
     let _coin;
 
-    console.warn('allCoins', allCoins);
     if (allCoins) {
       modes.map((mode) => {
         allCoins[mode].map((coin) => {
-          if (!_coinSelected && coin !== skipCoin) {
+          if (!_coinSelected &&
+              coin !== skipCoin) {
             _coinSelected = true;
             _coin = coin;
             _mode = mode;
@@ -123,7 +123,6 @@ class CoinTileItem extends React.Component {
       });
 
       setTimeout(() => {
-        console.warn('autoset active coin', _coin);
         this._dashboardChangeActiveCoin(_coin, _mode, true);
       }, 100);
     }
@@ -157,13 +156,10 @@ class CoinTileItem extends React.Component {
       );
 
       Store.dispatch(dashboardRemoveCoin(coin));
-      Store.dispatch(getDexCoins());
-      Store.dispatch(activeHandle());
+      this.autoSetActiveCoin(coin);
       setTimeout(() => {
-        this.autoSetActiveCoin(coin);
-        setTimeout(() => {
-          Store.dispatch(dashboardRemoveCoin(coin));
-        }, 500);
+        Store.dispatch(getDexCoins());
+        Store.dispatch(activeHandle());
       }, 500);
     });
   }
@@ -188,14 +184,10 @@ class CoinTileItem extends React.Component {
           )
         );
 
-        Store.dispatch(dashboardRemoveCoin(coin));
-        Store.dispatch(getDexCoins());
-        Store.dispatch(activeHandle());
+        this.autoSetActiveCoin(coin);
         setTimeout(() => {
-          this.autoSetActiveCoin(coin);
-          setTimeout(() => {
-            Store.dispatch(dashboardRemoveCoin(coin));
-          }, 500);
+          Store.dispatch(getDexCoins());
+          Store.dispatch(activeHandle());
         }, 500);
       }
     });
@@ -255,7 +247,6 @@ class CoinTileItem extends React.Component {
 
   _dashboardChangeActiveCoin(coin, mode, skipCoinsArrUpdate) {
     if (coin !== this.props.ActiveCoin.coin) {
-      console.warn('_dashboardChangeActiveCoin', skipCoinsArrUpdate);
       Store.dispatch(dashboardChangeActiveCoin(coin, mode, skipCoinsArrUpdate));
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
