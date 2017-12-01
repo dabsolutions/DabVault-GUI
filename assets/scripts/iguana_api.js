@@ -185,6 +185,11 @@ function Iguana_utxorawtx(data) {
 function checkAC(coinVal) {
 	if (coinVal == 'SUPERNET' ||
 			coinVal == 'REVS' ||
+			coinVal == 'DAB' ||
+			coinVal == 'TDAB' ||
+			coinVal == 'CL77' ||
+			coinVal == 'MAR' ||
+			coinVal == 'REVS' ||
 			coinVal == 'WLC' ||
 			coinVal == 'DEX' ||
 			coinVal == 'PANGEA' ||
