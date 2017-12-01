@@ -744,6 +744,7 @@ export const _lang = {
       'MNZ': 'Monaize (MNZ)',
       'PANGEA': 'PANGEA (PANGEA)',
       'REVS': 'REVS (REVS)',
+      'DABS': 'DABS (DABS)',
       'SHARK': 'SHARK (SHARK)',
       'MESH': 'SpaceMesh (MESH)',
       'SUPERNET': 'SUPERNET (SUPERNET)',

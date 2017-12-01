@@ -106,6 +106,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'REVS';
       coinname = 'REVS';
       break;
+    case 'DABS':
+      coinlogo = 'DABS';
+      coinname = 'DABS';
+      break;
     case 'WLC':
       titleBG = true;
       transparentBG = true;

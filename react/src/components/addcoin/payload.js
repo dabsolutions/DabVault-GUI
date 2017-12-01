@@ -95,6 +95,7 @@ export function checkCoinType(coin) {
 
 	if (coin === 'SUPERNET' ||
 			coin === 'REVS' ||
+			coin === 'DABS' ||
 			coin === 'SUPERNET' ||
 			coin === 'PANGEA' ||
 			coin === 'DEX' ||
@@ -416,6 +417,11 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 			'name': 'SUPERNET',
 			'supply': 816061,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'SUPERNET','conf':'SUPERNET.conf','path':confpath,'RELAY':-1,'VALIDATE':0,'startpend':4,'endpend':4,'maxpeers':32,'newcoin':'SUPERNET','name':'SUPERNET','netmagic':'cc55d9d4','p2p':assetChainPorts.SUPERNET - 1,'rpc':assetChainPorts.SUPERNET}) : {},
+		},
+		'DABS': {
+			'name': 'DABS',
+			'supply': 1300000,
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'REVS','conf':'REVS.conf','path':confpath,'RELAY':-1,'VALIDATE':0,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'REVS','name':'REVS','netmagic':'905c3498','p2p':assetChainPorts.REVS - 1,'rpc':assetChainPorts.REVS}) : {},
 		},
 		'REVS': {
 			'name': 'REVS',
