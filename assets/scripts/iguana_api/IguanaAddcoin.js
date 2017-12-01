@@ -325,6 +325,30 @@ function Iguana_addcoin(addcoin_data) {
 				'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"SUPERNET","conf":"SUPERNET.conf","path":confpath[0].path,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":11340,"rpc":11341}) : {},
 				'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":addcoin_data.mode,"VALIDATE":addcoin_data.mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":11340,"rpc":11341})
 			},
+			'DAB': {
+				'name': 'DABS',
+				'supply': 1300000,
+				'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"DABS","conf":"DABS.conf","path":confpath[0].path,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"DABS","name":"DABS","netmagic":"905c3498","p2p":10195,"rpc":10196}) : {},
+				'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":addcoin_data.mode,"VALIDATE":addcoin_data.mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"DABS","name":"DABS","netmagic":"905c3498","p2p":10195,"rpc":10196})
+			},
+			'TDAB': {
+				'name': 'tDABS',
+				'supply': 1300000,
+				'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"tDABS","conf":"tDABS.conf","path":confpath[0].path,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"tDABS","name":"tDABS","netmagic":"905c3498","p2p":10195,"rpc":10196}) : {},
+				'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":addcoin_data.mode,"VALIDATE":addcoin_data.mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"tDABS","name":"tDABS","netmagic":"905c3498","p2p":10195,"rpc":10196})
+			},
+			'CL77': {
+				'name': 'cl77hodl',
+				'supply': 1300000,
+				'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"cl77hodl","conf":"cl77hodl.conf","path":confpath[0].path,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"cl77hodl","name":"cl77hodl","netmagic":"905c3498","p2p":10195,"rpc":10196}) : {},
+				'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":addcoin_data.mode,"VALIDATE":addcoin_data.mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"cl77hodl","name":"cl77hodl","netmagic":"905c3498","p2p":10195,"rpc":10196})
+			},
+			'MAR': {
+				'name': 'MAR',
+				'supply': 1300000,
+				'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MAR","conf":"MAR.conf","path":confpath[0].path,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MAR","name":"MAR","netmagic":"905c3498","p2p":10195,"rpc":10196}) : {},
+				'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":addcoin_data.mode,"VALIDATE":addcoin_data.mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MAR","name":"MAR","netmagic":"905c3498","p2p":10195,"rpc":10196})
+			},
 			'REVS': {
 				'name': 'REVS',
 				'supply': 1300000,
@@ -494,6 +518,10 @@ function Iguana_addcoin(addcoin_data) {
 
 		if (addcoin_data.coin === 'SUPERNET' ||
 				addcoin_data.coin === 'REVS' ||
+				addcoin_data.coin === 'DAB' ||
+				addcoin_data.coin === 'TDAB' ||
+				addcoin_data.coin === 'CL77' ||
+				addcoin_data.coin === 'MAR' ||
 				addcoin_data.coin === 'SUPERNET' ||
 				addcoin_data.coin === 'PANGEA' ||
 				addcoin_data.coin === 'DEX' ||

@@ -689,6 +689,7 @@ var Login = function() {
     $( '#addcoin_select_coin_mdl_options-login' )
     .change(function() {
       var tmp_coin_val = $('#addcoin_select_coin_mdl_options-login').val();
+      console.log(tmp_coin_val);
 
       if (tmp_coin_val !== 'KMD' || tmp_coin_val !== 'KMD' ) {
         $('#addcoin_mdl_native_mode_login').prop('disabled', true);
@@ -706,7 +707,10 @@ var Login = function() {
       }
       if (tmp_coin_val == 'SUPERNET' ||
           tmp_coin_val == 'REVS' ||
-          tmp_coin_val == 'WLC' ||
+          tmp_coin_val == 'DAB' ||
+          tmp_coin_val == 'TDAB' ||
+          tmp_coin_val == 'CL77' ||
+          tmp_coin_val == 'MAR' ||
           tmp_coin_val == 'DEX' ||
           tmp_coin_val == 'PANGEA' ||
           tmp_coin_val == 'JUMBLR' ||
